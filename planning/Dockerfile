@@ -4,6 +4,7 @@ WORKDIR /home/gradle/src
 RUN gradle build -x test --no-daemon
 
 FROM openjdk:17-jdk-alpine
+ENV spring_profiles_active=dev
 EXPOSE 443
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/spring-boot-application.jar
