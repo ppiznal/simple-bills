@@ -17,7 +17,12 @@ services:
     ports:
       - 8080:8080
     restart: always
-  
+
+  simple-bills-gui:
+      build: simple-bills-gui
+      ports: 
+          - 80:80
+          - 443:443
 
   mongodb:
     image: mongo:4.4.16
