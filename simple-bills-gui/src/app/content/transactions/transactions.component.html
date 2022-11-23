@@ -1,0 +1,313 @@
+<div class="container p-1 text-center">
+  <div>
+    <br>
+    <button
+      class="btn btn-lg btn-outline-secondary m-2"
+      (click)="openTransactionCreationWindow('INCOME', createTransaction)">
+      Add income
+    </button>
+    <button
+      class="btn btn-lg btn-outline-secondary m-2"
+      (click)="openTransactionCreationWindow('EXPENSE', createTransaction)">
+      Add expense
+    </button>
+    <br><br>
+    <h5 class="fw-bold">
+      <span class="text-primary">Total balance: </span>
+      <span class="col col-form-label" *ngIf="!(balanceService.loading$ | async) else loading">
+          <span *ngIf="balanceService.balance$ | async as balance">{{balance.balance | currency}}</span>
+    </span>
+    </h5>
+  </div>
+  <hr>
+  <div class="row">
+    <form>
+      <div class="mb-3 row">
+        <label for="table-date-from" class="col-sm-2 col-form-label">Date from:</label>
+        <div class="col-xs-3 col-4">
+          <input
+            id="table-date-from"
+            type="date"
+            class="form-control"
+            name="dateFrom"
+            [(ngModel)]="transactionSearchService.dateFrom"
+          />
+        </div>
+        <label for="table-date-to" class="col-sm-2 col-form-label">Date to:</label>
+        <div class="col-xs-3 col-4">
+          <input
+            id="table-date-to"
+            type="date"
+            class="form-control"
+            name="dateTo"
+            [(ngModel)]="transactionSearchService.dateTo"
+          />
+        </div>
+      </div>
+      <div class="mb-3 row">
+        <label for="table-complete-search" class="col-sm-2 col-form-label">Page search:</label>
+        <div class="col-xs-3 col-4">
+          <input
+            id="table-complete-search"
+            type="text"
+            class="form-control"
+            name="searchTerm"
+            [(ngModel)]="transactionSearchService.searchTerm"
+          />
+        </div>
+        <span class="col col-form-label" *ngIf="transactionSearchService.loading$ | async">loading...</span>
+      </div>
+    </form>
+    <div *ngIf="transactionSearchService.pageableTransactions$ | async as pageableTransactions else noData">
+      <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+          <th scope="col" sortable="transactionNumber" (sort)="onSort($event)">#</th>
+          <th scope="col" sortable="type" (sort)="onSort($event)">Type</th>
+          <th scope="col" sortable="date" (sort)="onSort($event)">Date</th>
+          <th scope="col" sortable="amount" (sort)="onSort($event)">Amount</th>
+          <th scope="col" sortable="description" (sort)="onSort($event)">Description</th>
+          <th scope="col" sortable="category" (sort)="onSort($event)">Category</th>
+          <th scope="col"></th>
+          <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let transaction of pageableTransactions.transactions;">
+          <th scope="row">
+            <ngb-highlight [result]="transaction.transactionNumber"
+                           [term]="transactionSearchService.searchTerm"></ngb-highlight>
+          </th>
+
+          <td>
+            <ngb-highlight [result]="transaction.type.toString()"
+                           [term]="transactionSearchService.searchTerm"></ngb-highlight>
+          </td>
+
+          <td>
+            <ngb-highlight [result]="transaction.date | date"
+                           [term]="transactionSearchService.searchTerm"></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight [result]="transaction.amount | currency"
+                           [term]="transactionSearchService.searchTerm"></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight [result]="transaction.description"
+                           [term]="transactionSearchService.searchTerm"></ngb-highlight>
+          </td>
+          <td>
+            <ngb-highlight [result]="transaction.category" [term]="transactionSearchService.searchTerm"></ngb-highlight>
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              aria-label="Close"
+              (click)="openTransactionEditWindow(transaction, editTransaction)"
+            >Edit
+            </button>
+          </td>
+          <td>
+            <button type="button" class="btn-close" aria-label="Close"
+                    (click)="openDeletionConfirmationWindow(transaction.transactionNumber, deletionConfirmationWindow)"></button>
+          </td>
+        </tr>
+        <tr class="bg-info fw-bold">
+          <th scope="row"></th>
+          <td></td>
+          <td>Total page amount:</td>
+          <td>{{ pageableTransactions.pageTotalAmount | currency }} </td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="d-flex justify-content-between p-2">
+        <ngb-pagination
+          [collectionSize]="pageableTransactions.totalCount"
+          [(page)]="transactionSearchService.page"
+          [pageSize]="transactionSearchService.pageSize"
+          size="sm">
+        </ngb-pagination>
+        <select
+          *ngIf="pageableTransactions.totalCount > 5"
+          class="form-select"
+          style="width: auto; height: min-content" name="pageSize"
+          [(ngModel)]="transactionSearchService.pageSize">
+          <option [ngValue]="5">5 of {{pageableTransactions.totalCount}}</option>
+          <option *ngIf="pageableTransactions.totalCount > 10" [ngValue]="10">10
+            of {{pageableTransactions.totalCount}}</option>
+          <option *ngIf="pageableTransactions.totalCount > 20" [ngValue]="20">20
+            of {{pageableTransactions.totalCount}}</option>
+          <option *ngIf="pageableTransactions.totalCount < 50"
+                  [ngValue]="pageableTransactions.totalCount">{{pageableTransactions.totalCount}}
+            of {{pageableTransactions.totalCount}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #createTransaction let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-transaction-creation">Add new {{ transactionDto.type.toLowerCase() }}</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-dark">
+    <form>
+      <label for="category-transaction-input" class="col-xs-3 col-sm-2 col-form-label">Category</label>
+      <div *ngIf="categoriesToSelect$ | async as categories else noData" class="input-group">
+        <select [(ngModel)]="transactionDto.category" name="categoryRemoval" class="form-select"
+                aria-label="Default select example" id="category-transaction-input">
+          <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="description-transaction-input" class="col-xs-3 col-sm-2 col-form-label">Description</label>
+        <div class="input-group">
+          <input
+            id="description-transaction-input"
+            type="text"
+            class="form-control"
+            name="description"
+            [(ngModel)]="transactionDto.description"
+          />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="amount-transaction-input" class="col-xs-3 col-sm-2 col-form-label">Amount</label>
+        <div class="input-group">
+          <input
+            id="amount-transaction-input"
+            type="number" min="0.00" max="999999.99" step="0.01"
+            class="form-control"
+            name="amount"
+            [(ngModel)]="transactionDto.amount"
+          />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="date-transaction-input" class="col-xs-3 col-sm-2 col-form-label">Date</label>
+        <div class="input-group">
+          <input
+            id="date-transaction-input"
+            type="date"
+            class="form-control"
+            name="date"
+            [(ngModel)]="transactionDto.date"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Create new transaction
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editTransaction let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-transaction-update">Edit transaction <span
+      class="text-dark">#{{selectedTransaction}}</span></h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-dark">
+    <form>
+      <label for="transactionNumber-update-input" class="col-form-label">Transaction number</label>
+      <div class="input-group">
+        <input
+          type="text"
+          id="transactionNumber-update-input"
+          name="new-category-transaction-number-input"
+          class="form-control"
+          disabled
+          [(ngModel)]="transactionDto.transactionNumber">
+      </div>
+      <label for="transactionType-update-input" class="col-form-label">Transaction type</label>
+      <div class="input-group">
+        <input
+          type="text"
+          id="transactionType-update-input"
+          name="new-category-transaction-type-input"
+          class="form-control"
+          disabled
+          [(ngModel)]="transactionDto.type">
+      </div>
+      <label for="category-update-input" class="col-xs-3 col-sm-2 col-form-label">Category</label>
+      <div *ngIf="categoriesToSelect$ | async as categories else noData" class="input-group">
+        <select [(ngModel)]="transactionDto.category" name="categoryRemoval" class="form-select"
+                aria-label="Default select example" id="category-update-input">
+          <option *ngFor="let category of categories" value="{{category.name}}">{{category.name}}</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="description-update-input" class="col-xs-3 col-sm-2 col-form-label">Description</label>
+        <div class="input-group">
+          <input
+            id="description-update-input"
+            type="text"
+            class="form-control"
+            name="description"
+            [(ngModel)]="transactionDto.description"
+          />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="amount-update-input" class="col-xs-3 col-sm-2 col-form-label">Amount</label>
+        <div class="input-group">
+          <input
+            id="amount-update-input"
+            type="number" min="0.00" max="999999.99" step="0.01"
+            class="form-control"
+            name="amount"
+            [(ngModel)]="transactionDto.amount"
+          />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="date-update-input" class="col-xs-3 col-sm-2 col-form-label">Date</label>
+        <div class="input-group">
+          <input
+            id="date-update-input"
+            type="date"
+            class="form-control"
+            name="date"
+            [(ngModel)]="transactionDto.date"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Update transaction</button>
+  </div>
+</ng-template>
+
+<ng-template #deletionConfirmationWindow let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-transaction-deletion">Bill deletion</h4>
+    <button type="button" class="btn-close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p><strong class="text-danger">Are you sure you want to delete transaction <span
+      class="text-dark">#{{selectedTransaction}}</span>?</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
+  </div>
+</ng-template>
+
+<ng-template #noData>
+  <h5 class="text-center fw-bold">No Category Available</h5>
+</ng-template>
+
+
+<ng-template #loading>
+  <span class="text-dark">loading... </span>
+</ng-template>

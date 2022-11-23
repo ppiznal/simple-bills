@@ -1,0 +1,250 @@
+<div class="container p-1 text-center">
+  <button class="btn btn-lg btn-outline-secondary m-2" (click)="openDepositCreationWindow(depositCreation)">
+    Add deposit
+  </button>
+  <br>
+  <hr>
+  <div class="row">
+    <div *ngIf="depositService.deposits$ | async as deposits else noData">
+      <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Deposit type</th>
+          <th>Deposit name</th>
+          <th>Deposit value</th>
+          <th>Bank name</th>
+          <th>Duration [months]</th>
+          <th>Annual interest rate</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let deposit of deposits; index as i">
+          <th scope="row">
+            {{i + 1}}
+          </th>
+          <td>
+            {{deposit.depositType}}
+          </td>
+          <td>
+            {{deposit.name}}
+          </td>
+          <td>
+            {{deposit.value | currency}}
+          </td>
+          <td>
+            {{deposit.bankName}}
+          </td>
+          <td>
+            {{deposit.durationInMonths }}
+          </td>
+          <td>
+            {{deposit.annualInterestRate}}%
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              aria-label="Close"
+              (click)="openDepositEditWindow(deposit, editDeposit)"
+            >Edit
+            </button>
+          </td>
+          <td>
+            <button
+              type="button" class="btn-close" aria-label="Close"
+              (click)="openDepositDeletionConfirmationWindow(deposit.name, deletionConfirmationWindow)"
+            >
+            </button>
+          </td>
+        </tr>
+        <tr class="bg-info fw-bold">
+          <th></th>
+          <td></td>
+          <td>Total limit:</td>
+          <!--            <td>{{totalLimit | currency}}</td>-->
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!--
+      add new deposit modal window
+-->
+<ng-template #depositCreation let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-category-creation">Category creation</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-dark">
+    <form>
+      <h2 class="col-form-label">Add new deposit:</h2>
+      <div class="mb-3">
+        <label for="new-deposit-name-input" class="col-form-label">Deposit name</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="new-deposit-name-input"
+            name="new-category-transaction-type-input"
+            class="form-control"
+            [(ngModel)]="deposit.name">
+        </div>
+        <label for="new-deposit-type-input" class="col-form-label">Deposit type</label>
+        <select [(ngModel)]="deposit.depositType" name="categoryRemoval" class="form-select"
+                aria-label="Default select example" id="new-deposit-type-input">
+          <option value="TERM">Term</option>
+          <option value="PERPETUAL">Perpetual</option>
+        </select>
+        <label for="new-deposit-bank-input" class="col-form-label">Bank name</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-bank-input"
+            type="text"
+            class="form-control"
+            name="new-deposit-bank-input"
+            [(ngModel)]="deposit.bankName"/>
+        </div>
+        <label for="new-deposit-value-input" class="col-form-label">Deposit value</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-value-input"
+            type="text"
+            class="form-control"
+            name="new-deposit-value-input"
+            [(ngModel)]="deposit.value"/>
+        </div>
+        <label for="new-deposit-duration-input" class="col-form-label">Duration</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-duration-input"
+            type="text"
+            class="form-control"
+            name="new-deposit-duration-input"
+            [(ngModel)]="deposit.durationInMonths"/>
+        </div>
+        <label for="new-deposit-interest-rate-input" class="col-form-label">Annual interest rate</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-interest-rate-input"
+            type="text"
+            class="form-control"
+            name="new-deposit-interest-rate-input"
+            [(ngModel)]="deposit.annualInterestRate"/>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark m-2" (click)="modal.close('add category')">Create category
+    </button>
+  </div>
+</ng-template>
+
+<!--
+      edit deposit modal window
+-->
+<ng-template #editDeposit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-category-update">Category update</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-dark">
+    <form>
+      <h2 class="col-form-label">Add new deposit:</h2>
+      <div class="mb-3">
+        <label for="update-deposit-name-input" class="col-form-label">Deposit name</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="update-deposit-name-input"
+            name="new-category-transaction-type-input"
+            class="form-control"
+            disabled
+            [(ngModel)]="deposit.name">
+        </div>
+        <label for="update-deposit-type-input" class="col-form-label">Deposit type</label>
+        <select [(ngModel)]="deposit.depositType" name="categoryRemoval" class="form-select"
+                aria-label="Default select example" id="update-deposit-type-input">
+          <option value="TERM">Term</option>
+          <option value="PERPETUAL">Perpetual</option>
+        </select>
+        <label for="update-deposit-bank-input" class="col-form-label">Bank name</label>
+        <div class="input-group">
+          <input
+            id="update-deposit-bank-input"
+            type="text"
+            class="form-control"
+            name="update-deposit-bank-input"
+            [(ngModel)]="deposit.bankName"/>
+        </div>
+        <label for="update-deposit-value-input" class="col-form-label">Deposit value</label>
+        <div class="input-group">
+          <input
+            id="update-deposit-value-input"
+            type="text"
+            class="form-control"
+            name="update-deposit-value-input"
+            [(ngModel)]="deposit.value"/>
+        </div>
+        <label for="update-deposit-duration-input" class="col-form-label">Duration</label>
+        <div class="input-group">
+          <input
+            id="update-deposit-duration-input"
+            type="text"
+            class="form-control"
+            name="update-deposit-duration-input"
+            [(ngModel)]="deposit.durationInMonths"/>
+        </div>
+        <label for="update-deposit-interest-rate-input" class="col-form-label">Annual interest rate</label>
+        <div class="input-group">
+          <input
+            id="update-deposit-interest-rate-input"
+            type="text"
+            class="form-control"
+            name="update-deposit-interest-rate-input"
+            [(ngModel)]="deposit.annualInterestRate"/>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark m-2" (click)="modal.close('update deposit')">Update selected
+      deposit
+    </button>
+  </div>
+</ng-template>
+
+<!--
+      delete deposit modal window
+-->
+<ng-template #deletionConfirmationWindow let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-category-deletion">Deposit deletion</h4>
+    <button type="button" class="btn-close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <br>
+    <p><strong class="text-danger">Are you sure you want to delete
+      <span class="fw-bold text-dark">{{selectedDeposit}}</span>
+      category?</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
+  </div>
+</ng-template>
+
+<ng-template #noData>
+  <h3 class="text-center fw-bold">No deposits found</h3>
+</ng-template>
