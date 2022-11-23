@@ -1,0 +1,30 @@
+services:
+
+  transaction-management:
+    build: transaction-management
+    ports:
+      - 8080:8080
+    restart: always
+
+  planning:
+    build: planning
+    ports:
+      - 8080:8080
+    restart: always
+
+  asset-management:
+    build: asset-management
+    ports:
+      - 8080:8080
+    restart: always
+  
+
+  mongodb:
+    image: mongo:4.4.16
+    ports:
+      - 27027:27027
+    volumes:
+      - data:/mongodb
+
+volumes:
+  data:
