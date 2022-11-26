@@ -4,31 +4,65 @@ services:
     build: transaction-management
     ports:
       - 8080:8080
-    restart: always
+    restart: unless-stopped
+    depends_on:
+      - mongodb
 
   planning:
     build: planning
     ports:
       - 8080:8080
-    restart: always
+    restart: unless-stopped
+    depends_on:
+      - mongodb
 
   asset-management:
     build: asset-management
     ports:
       - 8080:8080
-    restart: always
+    restart: unless-stopped
+    depends_on:
+      - mongodb
 
   simple-bills-gui:
       build: simple-bills-gui
       ports: 
           - 80:80
+      restart: unless-stopped
+
+  postgres:
+    image: docker.io/library/postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: Passw0rd
+    ports:
+      - 5432:5432
+
+  keycloak:
+    build: keycloak
+    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres 
+    ports:
+      - 8443:8443
+      - 8080:8080
+    depends_on:
+      - postgres
 
   mongodb:
     image: mongo:4.4.16
     ports:
       - 27027:27027
     volumes:
-      - data:/mongodb
+      - mongo_data:/mongodb
 
 volumes:
-  data:
+  mongo_data:
+  postgres_data:
+    driver: local
