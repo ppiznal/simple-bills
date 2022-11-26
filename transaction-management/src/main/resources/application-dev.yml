@@ -16,4 +16,4 @@ spring:
   rabbitmq:
     host: 37.233.102.95
 
-simple-bills-gui: "https://simple-bills-lukaszse.cloud.okteto.net/"
+simple-bills-gui: "https://simple-bills-gui-lukaszse.cloud.okteto.net/"

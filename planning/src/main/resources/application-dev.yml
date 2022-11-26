@@ -20,7 +20,7 @@ server:
   port: 8080
 
 custom-properties:
-  simple-bills-gui: "https://simple-bills-lukaszse.cloud.okteto.net/"
+  simple-bills-gui: "https://simple-bills-gui-lukaszse.cloud.okteto.net/"
   expense-categories:
     - food
     - travel
