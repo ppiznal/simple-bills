@@ -46,7 +46,8 @@ services:
       - 443:8080
     depends_on:
       - postgres
-    command: start-dev --db-url-host postgres --db-url-database keycloak --db-username keycloak --db-password Passw0rd --http-enabled true
+    command: start-dev \ 
+      --db-url-host postgres --db-url-database keycloak --db-username keycloak --db-password Passw0rd --hostname-strict-https false
   
   postgres:
     image: postgres:latest
