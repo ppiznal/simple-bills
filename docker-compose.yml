@@ -25,10 +25,10 @@ services:
       - mongodb
 
   simple-bills-gui:
-      build: simple-bills-gui
-      ports: 
-          - 80:80
-      restart: unless-stopped
+    build: simple-bills-gui
+    ports:
+      - 80:80
+    restart: unless-stopped
 
   mongodb:
     image: mongo:4.4.16
@@ -46,9 +46,8 @@ services:
       - 443:8080
     depends_on:
       - postgres
-    command: start-dev \ 
-      --db-url-host postgres --db-url-database keycloak --db-username keycloak --db-password Passw0rd --hostname-strict-https false
-  
+    command: start-dev --db-url-host postgres --db-url-database keycloak --db-username keycloak --hostname https://keycloak-lukaszse.cloud.okteto.net --db-password Passw0rd --hostname-strict false --hostname-strict-https false --http-enabled true
+
   postgres:
     image: postgres:latest
     volumes:
