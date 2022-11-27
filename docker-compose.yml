@@ -37,6 +37,26 @@ services:
     volumes:
       - mongo_data:/mongodb
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 443:8080
+    depends_on:
+      - postgres
+    command: start-dev --db-url-host postgres --db-url-database keycloak --db-username keycloak --db-password Passw0rd
+  
+  postgres:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: Passw0rd
+
 volumes:
   mongo_data:
   postgres_data:
