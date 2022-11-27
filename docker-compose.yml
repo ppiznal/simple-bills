@@ -3,7 +3,7 @@ services:
   transaction-management:
     build: transaction-management
     ports:
-      - 443:8080
+      - 443:443
     restart: unless-stopped
     depends_on:
       - mongodb
