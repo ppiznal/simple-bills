@@ -4,6 +4,13 @@ WORKDIR /home/gradle/src
 RUN gradle build -x test --no-daemon
 
 FROM openjdk:17-jdk-alpine
+
+COPY okteto.crt $JAVA_HOME/jre/lib/security
+
+RUN \
+    cd $JAVA_HOME/jre/lib/security \
+    && keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias oktetocert -file okteto.crt
+
 ENV spring_profiles_active=dev
 EXPOSE 443
 RUN mkdir /app
