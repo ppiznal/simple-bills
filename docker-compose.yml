@@ -46,7 +46,7 @@ services:
       - 443:8080
     depends_on:
       - postgres
-    command: start-dev --db-url-host postgres --db-url-database keycloak --db-username keycloak --hostname https://keycloak-lukaszse.cloud.okteto.net --db-password Passw0rd --hostname-strict false --hostname-strict-https false --http-enabled true
+    command: start --db-url-host postgres --db-url-database keycloak --db-username keycloak --hostname https://keycloak-lukaszse.cloud.okteto.net --db-password Passw0rd --hostname-strict false --hostname-strict-https false --http-enabled true
 
   postgres:
     image: postgres:latest
