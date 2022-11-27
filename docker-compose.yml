@@ -3,7 +3,7 @@ services:
   transaction-management:
     build: transaction-management
     ports:
-      - 8080:8080
+      - 443:8080
     restart: unless-stopped
     depends_on:
       - mongodb
@@ -11,7 +11,7 @@ services:
   planning:
     build: planning
     ports:
-      - 8080:8080
+      - 443:8080
     restart: unless-stopped
     depends_on:
       - mongodb
@@ -19,7 +19,7 @@ services:
   asset-management:
     build: asset-management
     ports:
-      - 8080:8080
+      - 443:8080
     restart: unless-stopped
     depends_on:
       - mongodb
@@ -29,30 +29,6 @@ services:
       ports: 
           - 80:80
       restart: unless-stopped
-
-  postgres:
-    image: docker.io/library/postgres:latest
-    restart: unless-stopped
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: Passw0rd
-    ports:
-      - 5432:5432
-
-  keycloak:
-    image: quay.io/keycloak/keycloak:latest
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    ports:
-      - 8085:8080
-      - 8445:8443
-    depends_on:
-      - postgres
-    command: start-dev --db-url-host postgres --db-url-database keycloak --db-username keycloak --db-password Passw0rd
 
   mongodb:
     image: mongo:4.4.16
