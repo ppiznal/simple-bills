@@ -14,7 +14,7 @@ COPY /cert/okteto.crt $JAVA_HOME/jre/lib/security
 COPY /cert/keycloak.crt $JAVA_HOME/jre/lib/security
 RUN cd $JAVA_HOME/jre/lib/security && \
     keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias oktetocert -file okteto.crt && \
-    keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias keycloakcert -file keycloak.crt && 
+    keytool -keystore cacerts -storepass changeit -noprompt -trustcacerts -importcert -alias keycloakcert -file keycloak.crt
 
 ENV spring_profiles_active=dev
 RUN mkdir /app
