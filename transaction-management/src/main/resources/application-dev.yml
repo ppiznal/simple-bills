@@ -16,11 +16,4 @@ spring:
   rabbitmq:
     host: 37.233.102.95
 
-server:
-  port: 443
-  ssl:
-    key-password: 123456
-    key-store-password: 123456
-    key-store: 'classpath:keystore.jks'
-
 simple-bills-gui: "https://simple-bills-gui-lukaszse.cloud.okteto.net"
