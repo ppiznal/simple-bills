@@ -20,6 +20,6 @@ server:
   port: 8080
 
 custom-properties:
-  simple-bills-gui: "https://simple-bills-gui-lukaszse.cloud.okteto.net/"
+  simple-bills-gui: "https://simple-bills-gui-lukaszse.cloud.okteto.net"
   transaction-url: "https://transaction-management-lukaszse.cloud.okteto.net/"
   planning-url: "https://planning-lukaszse.cloud.okteto.net/"
