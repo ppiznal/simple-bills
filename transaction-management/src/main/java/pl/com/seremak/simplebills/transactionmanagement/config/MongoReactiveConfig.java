@@ -17,8 +17,7 @@ public class MongoReactiveConfig {
 
     @Value("${spring.data.mongodb.uri}")
     private String simpleBillsDatabaseUri;
-
-
+    
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
         return new ReactiveMongoTemplate(mongoClient(), simpleBillDatabase);
