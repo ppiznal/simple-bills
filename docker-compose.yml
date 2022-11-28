@@ -38,7 +38,7 @@ services:
       - mongo_data:/mongodb
 
   keycloak:
-    build: keycloak
+    image: quay.io/keycloak/keycloak:latest
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -46,6 +46,7 @@ services:
       - 443:8080
     depends_on:
       - postgres
+    command: start --db-url-host postgres --db-url-database keycloak --db-username keycloak --hostname keycloak-lukaszse.cloud.okteto.net --db-password Passw0rd --hostname-strict=false --hostname-strict-https=false --http-enabled=true 
 
   postgres:
     image: postgres:latest

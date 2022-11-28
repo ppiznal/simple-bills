@@ -20,7 +20,7 @@ WORKDIR /opt/keycloak
 ENV KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
 ENV KC_DB_USERNAME=keycloak
 ENV KC_DB_PASSWORD=Passw0rd
-ENV KC_HOSTNAME=https://keycloak-lukaszse.cloud.okteto.net
+ENV KC_HOSTNAME=keycloak-lukaszse.cloud.okteto.net
 ENV KC_PROXY=edge
 # ENV KC_HTTP_ENABLED=true        # superfluous since included in proxy=edge
 ENV KC_HOSTNAME_STRICT=false
