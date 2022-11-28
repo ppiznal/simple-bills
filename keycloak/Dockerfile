@@ -13,16 +13,13 @@ FROM quay.io/keycloak/keycloak:latest
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 WORKDIR /opt/keycloak
 
-# # For dev purposes only, please make sure to use proper certificates in production instead
-# RUN keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
-
-# Change these values to point to a running postgres instance
+RUN  /bin/kcadm.sh update realms/master -s sslRequired=NONE
 ENV KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
 ENV KC_DB_USERNAME=keycloak
 ENV KC_DB_PASSWORD=Passw0rd
 ENV KC_HOSTNAME=keycloak-lukaszse.cloud.okteto.net
 ENV KC_PROXY=edge
-# ENV KC_HTTP_ENABLED=true        # superfluous since included in proxy=edge
+ENV KC_HTTP_ENABLED=true     
 ENV KC_HOSTNAME_STRICT=false
 ENV KC_HOSTNAME_STRICT_HTTPS=false
 
