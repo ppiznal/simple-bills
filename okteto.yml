@@ -14,6 +14,15 @@ build:
     dockerfile: Dockerfile
 
   # You can use the following env vars to refer to this image in your deploy commands:
+  #  - OKTETO_BUILD_KEYCLOAK_REGISTRY: image registry
+  #  - OKTETO_BUILD_KEYCLOAK_REPOSITORY: image repo
+  #  - OKTETO_BUILD_KEYCLOAK_IMAGE: image name
+  #  - OKTETO_BUILD_KEYCLOAK_TAG: image tag
+  keycloak:
+    context: keycloak
+    dockerfile: Dockerfile
+
+  # You can use the following env vars to refer to this image in your deploy commands:
   #  - OKTETO_BUILD_PLANNING_REGISTRY: image registry
   #  - OKTETO_BUILD_PLANNING_REPOSITORY: image repo
   #  - OKTETO_BUILD_PLANNING_IMAGE: image name
@@ -45,6 +54,14 @@ build:
 deploy:
   compose:
     file: docker-compose.yml
+    services:
+      - asset-management
+      - simple-bills-gui
+      - mongodb
+      - keycloak
+      - postgres
+      - transaction-management
+      - planning
 
 # The dependencies section defines other git repositories to be deployed as part of your development environment
 # More info: https://www.okteto.com/docs/reference/manifest/#dependencies
@@ -63,7 +80,18 @@ dev:
       - asset-management:/usr/src/app
     forward:
       - 5005:5005
+    volumes:
+      - /home/gradle/.gradle
+  keycloak:
+    image: okteto/gradle:6.5
+    command: bash
+    workdir: /opt/keycloak
+    sync:
+      - keycloak:/opt/keycloak
+    forward:
+      - 5005:5005
       - 8080:8080
+      - 8443:8443
       - 8081:8080
     volumes:
       - /home/gradle/.gradle
