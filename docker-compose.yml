@@ -38,7 +38,7 @@ services:
       - mongo_data:/mongodb
 
   keycloak:
-    build: .
+    build: keycloak
     restart: unless-stopped
     environment:
       KEYCLOAK_ADMIN: admin

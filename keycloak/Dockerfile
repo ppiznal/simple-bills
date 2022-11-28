@@ -13,7 +13,7 @@ FROM quay.io/keycloak/keycloak:latest
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 WORKDIR /opt/keycloak
 
-RUN  /bin/kcadm.sh update realms/master -s sslRequired=NONE
+RUN /opt/keycloak/bin/kcadm.sh update realms/master -s sslRequired=NONE
 ENV KC_DB_URL=jdbc:postgresql://postgres:5432/keycloak
 ENV KC_DB_USERNAME=keycloak
 ENV KC_DB_PASSWORD=Passw0rd
