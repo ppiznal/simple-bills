@@ -35,9 +35,9 @@ services:
 
   mongodb:
     image: mongo:4.4.16
-    command: ["--tlsMode"]
+    command: mongod --port 27018
     ports:
-      - 27027:27027
+      - 443:443
     volumes:
       - mongo_data:/mongodb
 
