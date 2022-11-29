@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     depends_on:
       - rabbitmq
+    environment:
+      - MONGO_URI=${MONGODB_URI}
 
   planning:
     build: planning
@@ -15,6 +17,8 @@ services:
     restart: unless-stopped
     depends_on:
       - rabbitmq
+    environment:
+      - MONGO_URI=${MONGODB_URI}
 
   asset-management:
     build: asset-management
@@ -23,6 +27,8 @@ services:
     restart: unless-stopped
     depends_on:
       - rabbitmq
+    environment:
+      - MONGO_URI=${MONGODB_URI}
 
   simple-bills-gui:
     build: simple-bills-gui
