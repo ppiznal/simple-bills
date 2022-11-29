@@ -7,6 +7,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mongodb
+      - rabbitmq
 
   planning:
     build: planning
@@ -15,6 +16,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mongodb
+      - rabbitmq
 
   asset-management:
     build: asset-management
@@ -23,6 +25,7 @@ services:
     restart: unless-stopped
     depends_on:
       - mongodb
+      - rabbitmq
 
   simple-bills-gui:
     build: simple-bills-gui
