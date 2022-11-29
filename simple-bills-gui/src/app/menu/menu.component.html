@@ -31,7 +31,7 @@
             <button class="btn btn-outline-light" (click)="login()" type="submit">Login</button>
           </span>
           <span *ngIf="isLogged">
-            <button class="btn btn-outline-light" (click)="logout()" routerLink="/home">Logout</button>
+            <button class="btn btn-outline-light" (click)="logout()" href="{{simpleBillsGuiUrl}}">Logout</button>
           </span>
       </span>
     </div>
