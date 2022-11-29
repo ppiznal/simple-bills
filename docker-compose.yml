@@ -35,6 +35,7 @@ services:
 
   mongodb:
     image: mongo:4.4.16
+    command: ["--tsl"]
     ports:
       - 27027:27027
     volumes:
