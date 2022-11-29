@@ -47,8 +47,7 @@ export class OAuth2Service {
     return Cookie.check('access_token');
   }
 
-  logout() {
+  deleteTokenCookie() {
     Cookie.delete('access_token');
-    window.location.reload();
   }
 }

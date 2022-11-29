@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OAuth2Service } from "../../service/oAuth2.service";
 import { environment } from "../../environments/environment";
-import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-menu',
@@ -10,10 +9,9 @@ import { Router } from "@angular/router";
 })
 export class MenuComponent implements OnInit {
 
-  public simpleBillsGuiUrl = environment.redirectUri;
   public isLogged: boolean = false;
 
-  constructor(private _service: OAuth2Service, private router: Router) {
+  constructor(private _service: OAuth2Service) {
   }
 
   ngOnInit() {
@@ -31,7 +29,7 @@ export class MenuComponent implements OnInit {
   }
 
   logout() {
-    this._service.logout();
-    this.router.navigate(['/home']);
+    this._service.deleteTokenCookie();
+    window.location.href = environment.redirectUri;
   }
 }
