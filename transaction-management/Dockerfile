@@ -3,7 +3,7 @@ COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle build -x test --no-daemon
 
-FROM openjdk:15-alpine
+FROM openjdk:15.0.2-jdk
 
 USER root
 RUN  \

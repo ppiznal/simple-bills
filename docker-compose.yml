@@ -35,7 +35,7 @@ services:
 
   mongodb:
     image: mongo:4.4.16
-    command: mongod --port 27018
+    command: mongod --port 443
     ports:
       - 443:443
     volumes:
