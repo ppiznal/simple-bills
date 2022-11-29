@@ -7,7 +7,7 @@ plugins {
 
 group = 'pl.com.seremak'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '15'
+sourceCompatibility = '17'
 
 configurations {
     compileOnly {
