@@ -33,13 +33,6 @@ services:
       - 80:80
     restart: unless-stopped
 
-  mongodb:
-    image: mongo:4.4.16
-    ports:
-      - 27017:27017
-    volumes:
-      - mongo_data:/data/db
-
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
@@ -50,10 +43,6 @@ services:
       - rabbitmq_log:/var/log/rabbitmq
 
 volumes:
-  mongo_data:
-    driver: local
-  postgres_data:
-    driver: local
   rabbitmq_data:
     driver: local
   rabbitmq_log:
