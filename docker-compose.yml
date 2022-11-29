@@ -43,10 +43,13 @@ services:
         - 5672:5672
         - 15672:15672
     volumes:
-        - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-        - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+        - rabbitmq_data:/var/lib/rabbitmq/
+        - rabbitmq_data:/var/log/rabbitmq
 
 volumes:
   mongo_data:
+    driver: local
   postgres_data:
+    driver: local
+  rabbitmq_data:
     driver: local
