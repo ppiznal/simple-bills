@@ -14,7 +14,7 @@ spring:
           issuer-uri: https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills
           jwk-set-uri: https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/certs
   rabbitmq:
-    host: 37.233.102.95
+    host: rabbitmq
     
 server:
   port: 8080
