@@ -39,7 +39,7 @@ services:
     ports:
       - 443:443
     volumes:
-      - mongo_data:/mongodb
+      - mongo_data:/data/db
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
