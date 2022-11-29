@@ -43,8 +43,8 @@ services:
         - 5672:5672
         - 15672:15672
     volumes:
-        - rabbitmq_data:/var/lib/rabbitmq
-        - rabbitmq_data:/var/log/rabbitmq
+        - rabbitmq_data.lib:/var/lib/rabbitmq
+        - rabbitmq_data.log:/var/log/rabbitmq
 
 volumes:
   mongo_data:
@@ -53,3 +53,5 @@ volumes:
     driver: local
   rabbitmq_data:
     driver: local
+    lib:
+    log:
