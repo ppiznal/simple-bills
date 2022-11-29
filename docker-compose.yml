@@ -36,15 +36,15 @@ services:
       - 27027:27027
     volumes:
       - mongo_data:/mongodb
-  
+
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
-        - 5672:5672
-        - 15672:15672
+      - 5672:5672
+      - 15672:15672
     volumes:
-        - rabbitmq_data.lib:/var/lib/rabbitmq
-        - rabbitmq_data.log:/var/log/rabbitmq
+      - rabbitmq_data.lib:/var/lib/rabbitmq
+      - rabbitmq_data.log:/var/log/rabbitmq
 
 volumes:
   mongo_data:
@@ -52,6 +52,7 @@ volumes:
   postgres_data:
     driver: local
   rabbitmq_data:
-    driver: local
     lib:
+      driver: local
     log:
+      driver: local
