@@ -35,9 +35,9 @@ services:
 
   mongodb:
     image: mongo:4.4.16
-    command: mongod --port 443
+    # command: mongod --port 443
     ports:
-      - 443:443
+      - 443:27017
     volumes:
       - mongo_data:/data/db
 
