@@ -11,9 +11,9 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills
-          jwk-set-uri: https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
   rabbitmq:
     host: rabbitmq
 
-simple-bills-gui: "https://simple-bills-gui-lukaszse.cloud.okteto.net"
+simple-bills-gui: ${SIMPLE_BILLS_GUI_URL}

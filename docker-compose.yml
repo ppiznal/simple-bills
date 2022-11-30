@@ -7,8 +7,8 @@ services:
     restart: unless-stopped
     depends_on:
       - rabbitmq
-    environment:
-      - MONGO_URI=${MONGODB_URI}
+    env_file:
+      - common_env.env
 
   planning:
     build: planning
@@ -17,8 +17,8 @@ services:
     restart: unless-stopped
     depends_on:
       - rabbitmq
-    environment:
-      - MONGO_URI=${MONGODB_URI}
+    env_file:
+      - common_env.env
 
   asset-management:
     build: asset-management
@@ -29,6 +29,8 @@ services:
       - rabbitmq
     environment:
       - MONGO_URI=${MONGODB_URI}
+    env_file:
+      - common_env.env
 
   simple-bills-gui:
     build: simple-bills-gui

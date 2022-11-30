@@ -33,10 +33,8 @@ import static pl.com.seremak.simplebills.commons.model.Transaction.Type.EXPENSE;
 @Service
 @RequiredArgsConstructor
 public class DepositService {
-    public static final String WRONG_ASSET_TRANSACTION_MESSAGE_PAYLOAD_ERROR_MSG =
-            "Wrong message payload. Asset transaction event cannot have `CREATION` type";
+    
     private final DepositRepository depositRepository;
-
     private final DepositSearchRepository depositSearchRepository;
     private final BillsPlanClient billsPlanClient;
     private final TransactionsClient transactionsClient;
@@ -47,7 +45,7 @@ public class DepositService {
         final Mono<Deposit> transactionAction = switch (transactionEventDto.getType()) {
             case UPDATE -> updateDeposit(transactionEventDto);
             case DELETION -> deleteDeposit(transactionEventDto);
-            case CREATION -> throw new WrongPayloadException(WRONG_ASSET_TRANSACTION_MESSAGE_PAYLOAD_ERROR_MSG);
+            case CREATION -> Mono.empty();
         };
         transactionAction.subscribe();
     }
