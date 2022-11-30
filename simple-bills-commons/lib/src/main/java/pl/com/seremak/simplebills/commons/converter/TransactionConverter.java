@@ -17,8 +17,6 @@ import static pl.com.seremak.simplebills.commons.model.Transaction.Type.EXPENSE;
 import static pl.com.seremak.simplebills.commons.model.Transaction.Type.valueOf;
 import static pl.com.seremak.simplebills.commons.utils.DateUtils.toInstantUTC;
 
-;
-
 public class TransactionConverter {
 
 
@@ -47,9 +45,9 @@ public class TransactionConverter {
         return toTransaction(username, transactionDto.getTransactionNumber(), transactionDto);
     }
 
-    public static Transaction toTransaction(final String username,
-                                            final Integer transactionNumber,
-                                            final TransactionDto transactionDto) {
+    private static Transaction toTransaction(final String username,
+                                             final Integer transactionNumber,
+                                             final TransactionDto transactionDto) {
         final Transaction.TransactionBuilder transactionBuilder = Transaction.builder()
                 .user(username)
                 .type(valueOf(transactionDto.getType().toUpperCase()))
@@ -79,15 +77,16 @@ public class TransactionConverter {
         return toTransactionDto(transaction, actionType, transaction.getAmount());
     }
 
-    public static TransactionEventDto toTransactionDto(final Transaction transaction,
-                                                       final ActionType actionType,
-                                                       final BigDecimal amountDiff) {
+    private static TransactionEventDto toTransactionDto(final Transaction transaction,
+                                                        final ActionType actionType,
+                                                        final BigDecimal amountDiff) {
         return TransactionEventDto.builder()
                 .username(transaction.getUser())
                 .categoryName(transaction.getCategory())
                 .type(actionType)
                 .amount(normalizeAmount(amountDiff, transaction.getType()))
                 .date(transaction.getDate())
+                .transactionNumber(transaction.getTransactionNumber())
                 .build();
     }
 
