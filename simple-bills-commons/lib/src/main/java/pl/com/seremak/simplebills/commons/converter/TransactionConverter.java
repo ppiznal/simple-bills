@@ -77,9 +77,9 @@ public class TransactionConverter {
         return toTransactionDto(transaction, actionType, transaction.getAmount());
     }
 
-    private static TransactionEventDto toTransactionDto(final Transaction transaction,
-                                                        final ActionType actionType,
-                                                        final BigDecimal amountDiff) {
+    public static TransactionEventDto toTransactionDto(final Transaction transaction,
+                                                       final ActionType actionType,
+                                                       final BigDecimal amountDiff) {
         return TransactionEventDto.builder()
                 .username(transaction.getUser())
                 .categoryName(transaction.getCategory())
@@ -90,17 +90,17 @@ public class TransactionConverter {
                 .build();
     }
 
-    private static BigDecimal normalizeAmount(final BigDecimal amount, final Transaction.Type transactionType) {
+    public static BigDecimal normalizeAmount(final BigDecimal amount, final Transaction.Type transactionType) {
         return EXPENSE.equals(transactionType) ?
                 amount.abs().negate() : amount.abs();
     }
 
-    private static BigDecimal normalizeAmount(final BigDecimal amount, final String transactionTypeStr) {
+    public static BigDecimal normalizeAmount(final BigDecimal amount, final String transactionTypeStr) {
         final Transaction.Type transactionType = valueOf(transactionTypeStr);
         return normalizeAmount(amount, transactionType);
     }
 
-    private static String prepareDescription(final String depositName, final String bankName) {
+    public static String prepareDescription(final String depositName, final String bankName) {
         final String description = StringUtils.isBlank(bankName) ?
                 "%s".formatted(depositName) :
                 "%s in %s".formatted(depositName, bankName);
