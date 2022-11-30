@@ -13,7 +13,9 @@ spring:
         jwt:
           issuer-uri: http://localhost:8085/realms/simple-bills
           jwk-set-uri: http://localhost:8085/realms/simple-bills/protocol/openid-connect/certs
-
+  rabbitmq:
+    host: rabbitmq
+    
 server:
   port: 8082
 
