@@ -45,9 +45,9 @@ public class TransactionConverter {
         return toTransaction(username, transactionDto.getTransactionNumber(), transactionDto);
     }
 
-    private static Transaction toTransaction(final String username,
-                                             final Integer transactionNumber,
-                                             final TransactionDto transactionDto) {
+    public static Transaction toTransaction(final String username,
+                                            final Integer transactionNumber,
+                                            final TransactionDto transactionDto) {
         final Transaction.TransactionBuilder transactionBuilder = Transaction.builder()
                 .user(username)
                 .type(valueOf(transactionDto.getType().toUpperCase()))
