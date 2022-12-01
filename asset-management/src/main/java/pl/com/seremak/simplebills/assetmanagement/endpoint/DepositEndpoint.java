@@ -1,6 +1,7 @@
 package pl.com.seremak.simplebills.assetmanagement.endpoint;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import pl.com.seremak.simplebills.commons.model.Deposit;
 import pl.com.seremak.simplebills.commons.utils.JwtExtractionHelper;
 import reactor.core.publisher.Mono;
 
-import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

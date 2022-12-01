@@ -46,7 +46,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.projectreactor:reactor-test'
@@ -54,11 +53,11 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mongodb'
     testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
-    testImplementation 'org.codehaus.groovy:groovy:3.0.7'
+    testImplementation 'org.codehaus.groovy:groovy:3.0.13'
     testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
     testImplementation 'org.spockframework:spock-spring:2.3-groovy-3.0'
-    testAnnotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 

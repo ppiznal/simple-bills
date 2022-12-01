@@ -6,7 +6,7 @@ spring:
   data:
     mongodb:
       database: asset
-      uri: mongodb://localhost:27027
+      uri: mongodb://localhost:27017
   security:
     oauth2:
       resourceserver:

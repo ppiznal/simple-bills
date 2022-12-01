@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 import java.math.BigDecimal;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Document
 @Builder
 @NoArgsConstructor

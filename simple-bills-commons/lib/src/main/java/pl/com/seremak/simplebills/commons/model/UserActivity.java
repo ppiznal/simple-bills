@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(staticName = "of")

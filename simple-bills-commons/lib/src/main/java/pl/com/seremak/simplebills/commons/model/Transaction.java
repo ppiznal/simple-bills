@@ -13,6 +13,7 @@ import java.time.Instant;
 
 @Document
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
