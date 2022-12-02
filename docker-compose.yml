@@ -1,6 +1,6 @@
 services:
 
-  gui:
+  simple-bills:
     build: simple-bills-gui
     ports:
       - 80:80
