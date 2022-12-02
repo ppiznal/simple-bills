@@ -1,6 +1,15 @@
-version: '3.7'
-
 services:
+
+  gui:
+    build: 
+      context: simple-bills-gui
+      dockerfile: DockerfileLocal
+    ports:
+      - 80:80
+    depends_on:
+      - transaction-management
+      - planning
+      - asset-management
 
   transaction-management:
     build: transaction-management
@@ -9,7 +18,7 @@ services:
       - rabbitmq
       - keycloak
     ports:
-      - 8080:8080
+      - 8081:8081
     extra_hosts:
       - host.docker.internal:host-gateway
     env_file:
@@ -22,7 +31,7 @@ services:
       - rabbitmq
       - keycloak
     ports:
-      - 8081:8080
+      - 8082:8082
     extra_hosts:
       - host.docker.internal:host-gateway
     env_file:
@@ -35,16 +44,11 @@ services:
       - rabbitmq
       - keycloak
     ports:
-      - 8082:8080
+      - 8083:8083
     extra_hosts:
       - host.docker.internal:host-gateway
     env_file:
       - common_env_local.env
-
-  simple-bills-gui:
-    build: simple-bills-gui
-    ports:
-      - 8089:80
 
   mongodb:
     image: mongo:4.4.16

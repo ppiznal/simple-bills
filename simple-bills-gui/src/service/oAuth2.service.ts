@@ -7,7 +7,7 @@ import { environment } from "../environments/environment";
 
 @Injectable({providedIn: "root"})
 export class OAuth2Service {
-  public clientId = 'newClient';
+  public clientId = environment.clientId;
   public redirectUri = environment.redirectUri;
 
   constructor(private _http: HttpClient) {

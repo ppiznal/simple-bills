@@ -15,10 +15,10 @@ spring:
           jwk-set-uri: http://localhost:8085/realms/simple-bills/protocol/openid-connect/certs
 
 server:
-  port: 8081
+  port: 8082
 
 custom-properties:
-  simple-bills-gui: "http://localhost:8089"
+  simple-bills-gui: "http://localhost"
   expense-categories:
     - food
     - travel

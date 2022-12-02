@@ -5,5 +5,6 @@ export const environment = {
   assetManagementHost: "https://asset-management-lukaszse.cloud.okteto.net",
   redirectUri: "https://simple-bills-gui-lukaszse.cloud.okteto.net/",
   tokenUrl: "https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/token",
-  authUrl: "https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/auth"
+  authUrl: "https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/auth",
+  clientId: "simple-bills"
 };

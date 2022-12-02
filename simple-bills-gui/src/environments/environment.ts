@@ -5,12 +5,13 @@
 export const environment = {
 
   production: false,
-  transactionManagementHost: "http://localhost:8080",
-  planningHost: "http://localhost:8081",
-  assetManagementHost: "http://localhost:8082",
-  redirectUri: "http://localhost:8089/",
+  transactionManagementHost: "http://localhost:8081",
+  planningHost: "http://localhost:8082",
+  assetManagementHost: "http://localhost:8083",
+  redirectUri: "http://localhost/",
   tokenUrl: "http://localhost:8085/realms/simple-bills/protocol/openid-connect/token",
-  authUrl: "http://localhost:8085/realms/simple-bills/protocol/openid-connect/auth"
+  authUrl: "http://localhost:8085/realms/simple-bills/protocol/openid-connect/auth",
+  clientId: "simple-bills"
 };
 
 /*

@@ -1,5 +1,15 @@
 services:
 
+  gui:
+    build: simple-bills-gui
+    ports:
+      - 80:80
+    restart: unless-stopped
+    depends_on:
+      - transaction-management
+      - planning
+      - asset-management
+
   transaction-management:
     build: transaction-management
     ports:
@@ -29,12 +39,6 @@ services:
       - rabbitmq
     env_file:
       - common_env.env
-
-  simple-bills-gui:
-    build: simple-bills-gui
-    ports:
-      - 80:80
-    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management

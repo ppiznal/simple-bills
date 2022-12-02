@@ -15,6 +15,6 @@ spring:
           jwk-set-uri: http://localhost:8085/realms/simple-bills/protocol/openid-connect/certs
 
 server:
-  port: 8080
+  port: 8081
 
-simple-bills-gui: "http://localhost:8089"
+simple-bills-gui: "http://localhost"
