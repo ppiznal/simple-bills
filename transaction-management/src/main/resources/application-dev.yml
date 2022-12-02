@@ -15,5 +15,8 @@ spring:
           jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
   rabbitmq:
     host: rabbitmq
+    username: ${RABBITMQ_DEFAULT_USER}
+    password: ${RABBITMQ_DEFAULT_PASS}
+
 
 simple-bills-gui: ${SIMPLE_BILLS_GUI_URL}
