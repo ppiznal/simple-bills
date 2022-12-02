@@ -30,6 +30,6 @@ export class MenuComponent implements OnInit {
 
   logout() {
     this._service.deleteTokenCookie();
-    window.location.href = environment.redirectUri;
+    window.location.href = this._service.redirectUri;
   }
 }
