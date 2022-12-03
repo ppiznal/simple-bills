@@ -19,7 +19,7 @@ import java.util.List;
 @EnableWebFluxSecurity
 public class SpringSecurity {
 
-    @Value("${simple-bills-gui}")
+    @Value("${allowed-origin}")
     private String simpleBillsGuiApp;
 
     @Bean
@@ -53,7 +53,7 @@ public class SpringSecurity {
         return source;
     }
 
-    private ServerAuthenticationConverter bearerTokenConverter() {
+    private static ServerAuthenticationConverter bearerTokenConverter() {
         final ServerBearerTokenAuthenticationConverter authenticationConverter = new ServerBearerTokenAuthenticationConverter();
         authenticationConverter.setAllowUriQueryParameter(true);
         return authenticationConverter;

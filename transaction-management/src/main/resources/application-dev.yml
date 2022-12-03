@@ -19,4 +19,4 @@ spring:
     password: ${RABBITMQ_DEFAULT_PASS}
 
 
-simple-bills-gui: ${SIMPLE_BILLS_GUI_URL}
+allowed-origin: ${SIMPLE_BILLS_GUI_URL}

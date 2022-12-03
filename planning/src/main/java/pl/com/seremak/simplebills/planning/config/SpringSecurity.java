@@ -19,8 +19,8 @@ import java.util.List;
 @EnableWebFluxSecurity
 public class SpringSecurity {
 
-    @Value("${custom-properties.simple-bills-gui}")
-    private String simpleBillsGuiApp;
+    @Value("${custom-properties.allowed-origin}")
+    private String allowedOrigin;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(
@@ -44,7 +44,7 @@ public class SpringSecurity {
         corsConfig.applyPermitDefaultValues();
         corsConfig.addAllowedMethod(HttpMethod.PUT);
         corsConfig.addAllowedMethod(HttpMethod.DELETE);
-        corsConfig.setAllowedOrigins(List.of(simpleBillsGuiApp));
+        corsConfig.setAllowedOrigins(List.of(allowedOrigin));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
         return source;

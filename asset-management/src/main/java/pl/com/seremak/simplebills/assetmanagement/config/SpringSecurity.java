@@ -19,7 +19,7 @@ import java.util.List;
 @EnableWebFluxSecurity
 public class SpringSecurity {
 
-    @Value("${custom-properties.simple-bills-gui}")
+    @Value("${custom-properties.allowed-origin}")
     private String simpleBillsGuiApp;
 
     @Bean

@@ -17,4 +17,4 @@ spring:
 server:
   port: 8081
 
-simple-bills-gui: "http://localhost"
+allowed-origin: "*"

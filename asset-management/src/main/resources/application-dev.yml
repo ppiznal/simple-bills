@@ -22,6 +22,6 @@ server:
   port: 8080
 
 custom-properties:
-  simple-bills-gui: ${SIMPLE_BILLS_GUI_URL}
+  allowed-origin: ${SIMPLE_BILLS_GUI_URL}
   transaction-url: ${TRANSACTION_URL}
   planning-url: ${PLANNING_URL}
