@@ -9,9 +9,9 @@ export const environment = {
   planningHost: "http://localhost:8082",
   assetManagementHost: "http://localhost:8083",
   redirectUri: "http://localhost/",
-  tokenUrl: "http://localhost:8085/realms/simple-bills/protocol/openid-connect/token",
-  authUrl: "http://localhost:8085/realms/simple-bills/protocol/openid-connect/auth",
-  clientId: "simple-bills"
+  tokenUrl: "https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/token",
+  authUrl: "https://ubuntudev.llseremak.p5.tiktalik.io/realms/simple-bills/protocol/openid-connect/auth",
+  clientId: "simple-bills-local"
 };
 
 /*
