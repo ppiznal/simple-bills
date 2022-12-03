@@ -18,6 +18,6 @@ server:
   port: 8083
 
 custom-properties:
-  allowed-origin: "*"
+  allowed-origin: "http://localhost"
   transaction-url: "http://localhost:8081"
   planning-url: "http://localhost:8082"

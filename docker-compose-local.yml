@@ -6,6 +6,8 @@ services:
       dockerfile: DockerfileLocal
     ports:
       - 80:80
+    extra_hosts:
+      - localhost:192.168.55.205
     depends_on:
       - transaction-management
       - planning
@@ -20,7 +22,7 @@ services:
     ports:
       - 8081:8080
     extra_hosts:
-      - host.docker.internal:host-gateway
+      - localhost:192.168.55.205
     env_file:
       - common_env_local.env
 
@@ -33,7 +35,7 @@ services:
     ports:
       - 8082:8080
     extra_hosts:
-      - host.docker.internal:host-gateway
+      - localhost:192.168.55.205
     env_file:
       - common_env_local.env
 
@@ -46,7 +48,7 @@ services:
     ports:
       - 8083:8080
     extra_hosts:
-      - host.docker.internal:host-gateway
+      - localhost:192.168.55.205
     env_file:
       - common_env_local.env
 
@@ -75,6 +77,8 @@ services:
       - postgres
     ports:
       - 8085:8080
+    extra_hosts:
+      - localhost:192.168.55.205
     command: start-dev --db-url-host postgres --db-url-database keycloak --db-username keycloak
 
   postgres:

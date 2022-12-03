@@ -17,4 +17,4 @@ spring:
 server:
   port: 8081
 
-allowed-origin: "*"
+allowed-origin: "http://localhost"
