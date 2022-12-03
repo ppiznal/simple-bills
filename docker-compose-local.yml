@@ -1,6 +1,6 @@
 services:
 
-  simple-bills:
+  simple-bills-gui:
     build: 
       context: simple-bills-gui
       dockerfile: DockerfileLocal

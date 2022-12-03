@@ -18,6 +18,6 @@ server:
   port: 8083
 
 custom-properties:
-  simple-bills-gui: "http://localhost:8089"
+  simple-bills-gui: "http://localhost"
   transaction-url: "http://localhost:8081"
-  planning-url: "http://localhost"
+  planning-url: "http://localhost:8082"
