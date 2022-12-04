@@ -1,6 +1,6 @@
 import { Injectable, PipeTransform } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, catchError, debounceTime, Observable, Subject, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, debounceTime, Observable, retry, Subject, switchMap, tap } from "rxjs";
 import { Transaction } from "../dto/transaction";
 import { map } from "rxjs/operators";
 import { DatePipe, DecimalPipe } from "@angular/common";
@@ -54,11 +54,12 @@ export class TransactionSearchService {
     let url = HttpUtils.prepareUrl(TransactionSearchService.host, TransactionSearchService.endpoint, pageSize, pageNumber, sortDirection, sortColumn, dateFrom, dateTo);
     return this.httpClient.get<Transaction[]>(url, {headers: HttpUtils.prepareHeaders(), observe: 'response'})
       .pipe(
+        tap(console.log),
+        retry({count: 3, delay: 1000}),
         map((response) => {
           return new PageableTransactions(response.body, Number(response.headers.get(HttpUtils.X_TOTAL_COUNT)));
         }),
         catchError(HttpUtils.handleError),
-        tap(console.log)
       );
   }
 

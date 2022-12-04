@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
-import { BehaviorSubject, catchError, debounceTime, Observable, Subject, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, debounceTime, Observable, retry, Subject, switchMap, tap } from "rxjs";
 import { Deposit } from "../dto/deposit";
 import { HttpClient } from "@angular/common/http";
 import { Balance } from "../dto/balance";
@@ -32,8 +32,9 @@ export class DepositService {
     const url = HttpUtils.prepareUrl(DepositService.host, DepositService.endpoint);
     return this.httpClient.get<Balance>(url, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        tap(console.log),
+        retry({count: 3, delay: 1000}),
         catchError(HttpUtils.handleError),
-        tap(console.log)
       );
   }
 
@@ -43,6 +44,7 @@ export class DepositService {
       .post<string>(url, deposit, {headers: HttpUtils.prepareHeaders()})
       .pipe(
         tap(strResponse => console.log(`Transaction with transactionNumber=${strResponse} created.`)),
+        retry({count: 3, delay: 1000}),
         tap(() => this.refresh()),
         catchError(HttpUtils.handleError)
       )
@@ -54,6 +56,7 @@ export class DepositService {
       .patch<Transaction>(url, deposit, {headers: HttpUtils.prepareHeaders()})
       .pipe(
         tap((updatedBill) => console.log(`Transaction with transactionNumber=${updatedBill.transactionNumber} updated.`)),
+        retry({count: 3, delay: 1000}),
         tap(() => this.refresh()),
         catchError(HttpUtils.handleError)
       )
@@ -65,6 +68,7 @@ export class DepositService {
       .delete<string>(url, {headers: HttpUtils.prepareHeaders()})
       .pipe(
         tap(() => console.log(`Transaction with transactionNumber=${transactionNumber} deleted.`)),
+        retry({count: 3, delay: 1000}),
         tap(() => this.refresh()),
         catchError(HttpUtils.handleError)
       )

@@ -1,43 +1,59 @@
 package pl.com.seremak.simplebills.transactionmanagement.config;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.server.resource.web.server.ServerBearerTokenAuthenticationConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableWebFluxSecurity
+@RequiredArgsConstructor
 public class SpringSecurity {
 
     @Value("${allowed-origin}")
-    private String simpleBillsGuiApp;
+    private String allowedOrigin;
+
+    private final Environment environment;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(
             final ServerHttpSecurity http) {
-        return http
-                .csrf()
-                .disable()
-//                .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
-//                .and()
+        final ServerHttpSecurity serverHttpSecurity = http
                 .authorizeExchange()
-                .pathMatchers("/users/admin", "/users/admin/*").hasAuthority("ROLE_ADMIN")
-                .anyExchange().permitAll()
+                .anyExchange().authenticated()
                 .and()
                 .oauth2ResourceServer().bearerTokenConverter(bearerTokenConverter())
                 .jwt()
                 .and().and()
-                .build();
+                .cors()
+                .and();
+        return extractActiveProfileName(environment).equals("local") ?
+                serverHttpSecurity
+                        .csrf()
+                        .disable()
+                        .build() :
+                serverHttpSecurity
+                        .csrf()
+                        .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+                        .and()
+                        .build();
     }
 
     @Bean
@@ -46,8 +62,7 @@ public class SpringSecurity {
         corsConfig.applyPermitDefaultValues();
         corsConfig.addAllowedMethod(HttpMethod.PUT);
         corsConfig.addAllowedMethod(HttpMethod.DELETE);
-        corsConfig.addAllowedMethod(HttpMethod.PATCH);
-        corsConfig.setAllowedOrigins(List.of(simpleBillsGuiApp));
+        corsConfig.setAllowedOrigins(List.of(allowedOrigin));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig);
         return source;
@@ -59,4 +74,11 @@ public class SpringSecurity {
         return authenticationConverter;
     }
 
+    private static String extractActiveProfileName(final Environment environment) {
+        final String activeProfileName = Arrays.stream(environment.getActiveProfiles())
+                .findFirst()
+                .orElse(StringUtils.EMPTY);
+        log.info("Active profile: {}", activeProfileName);
+        return activeProfileName;
+    }
 }

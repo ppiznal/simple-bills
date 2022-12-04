@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environments/environment";
-import { BehaviorSubject, catchError, debounceTime, Observable, Subject, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, debounceTime, Observable, retry, Subject, switchMap, tap } from "rxjs";
 import { CategoryUsageLimit } from "../dto/categoryUsageLimit";
 import { HttpUtils } from "../utils/httpClientUtils";
 import { Injectable } from "@angular/core";
@@ -51,10 +51,12 @@ export class UsageLimitBarChartService {
   private findCategoryUsageLimits(total?: boolean): Observable<CategoryUsageLimit[]> {
     const url = HttpUtils.prepareUrl(UsageLimitBarChartService.host, UsageLimitBarChartService.endpoint);
     const completeUrl = total ? `${url}?total=true` : url;
-    return this.httpClient.get<UsageLimitBarChartService[]>(completeUrl, {headers: HttpUtils.prepareHeaders()})
+    return this.httpClient
+      .get<UsageLimitBarChartService[]>(completeUrl, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        tap(console.log),
+        retry({count: 3, delay: 1000}),
         catchError(HttpUtils.handleError),
-        tap(console.log)
       );
   }
 

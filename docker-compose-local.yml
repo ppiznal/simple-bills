@@ -5,7 +5,7 @@ services:
       context: simple-bills-gui
       dockerfile: DockerfileLocal
     ports:
-      - 80:80
+      - 8080:80
     depends_on:
       - transaction-management
       - planning

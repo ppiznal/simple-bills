@@ -1,31 +1,32 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Cookie } from "ng2-cookies";
-import { throwError } from "rxjs";
 import { environment } from "../environments/environment";
+import { catchError, tap } from "rxjs";
+import { HttpUtils } from "../utils/httpClientUtils";
 
 
 @Injectable({providedIn: "root"})
 export class OAuth2Service {
+
+  private readonly scopes = ["openid", "write", "read"];
   public clientId = environment.clientId;
   public redirectUri = environment.redirectUri;
 
-  constructor(private _http: HttpClient) {
+  constructor(private httpClient: HttpClient) {
   }
 
   retrieveToken(code) {
-    let params = new URLSearchParams();
-    params.append('grant_type', 'authorization_code');
-    params.append('client_id', this.clientId);
-    params.append('redirect_uri', this.redirectUri);
-    params.append('code', code);
-
-    let oauth2TokenUrl = `${environment.tokenUrl}`
-    let headers = new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'});
-    this._http.post(oauth2TokenUrl, params.toString(), {headers: headers})
-      .subscribe(
-        data => this.saveToken(data),
-        err => this.handleError(err));
+    const params = HttpUtils.prepareOAuth2CodeFlowUrlParams(code, this.clientId, this.redirectUri);
+    const oauth2TokenUrl = `${environment.tokenUrl}`
+    const headers = new HttpHeaders({'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'});
+    this.httpClient
+      .post(oauth2TokenUrl, params, {headers: headers})
+      .pipe(
+        tap(data => this.saveToken(data)),
+        catchError(HttpUtils.handleError)
+      )
+      .subscribe();
   }
 
   saveToken(token) {
@@ -35,19 +36,15 @@ export class OAuth2Service {
     window.location.href = this.redirectUri;
   }
 
-  handleError(error) {
-    alert('Error: ' + error.toString())
-  }
-
-  errorHandler(error: HttpErrorResponse) {
-    return throwError(error.message || 'server Error');
-  }
-
   checkCredentials() {
     return Cookie.check('access_token');
   }
 
   deleteTokenCookie() {
     Cookie.delete('access_token');
+  }
+
+  prepareOAuthProviderLoginUrl(): string {
+    return HttpUtils.prepareOAuth2ProviderLoginUri(environment.authUrl, environment.clientId, environment.redirectUri, this.scopes);
   }
 }

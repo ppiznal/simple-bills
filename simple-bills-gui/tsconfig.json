@@ -13,8 +13,9 @@
     "target": "es2020",
     "module": "es2020",
     "lib": [
-      "es2020",
-      "dom"
+      "ES2021",
+      "dom",
+      "ES2021.String"
     ]
   },
   "angularCompilerOptions": {
