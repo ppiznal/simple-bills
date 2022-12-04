@@ -216,6 +216,7 @@
     </form>
   </div>
   <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
     <button
       type="button"
       class="btn btn-outline-dark"
@@ -312,7 +313,13 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Update transaction</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+      [disabled]="!updateTransactionForm.valid">Create new transaction
+    </button>
   </div>
 </ng-template>
 
