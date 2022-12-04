@@ -43,11 +43,15 @@ input.ng-invalid.ng-touched {
   border: 1px solid red;
 }
 
-.invalid-feedback.ng-invalid.ng-touched {
-  display: none;
-  width: 100%;
-  margin-top: 0.25rem;
-  font-size: 0.875em;
-  color: #dc3545;
+select.ng-invalid.ng-touched {
+  border: 1px solid red;
 }
+
+//input.ng-touched {
+//  border: 1px solid green;
+//}
+//
+//select.ng-touched {
+//  border: 1px solid green;
+//}
 
