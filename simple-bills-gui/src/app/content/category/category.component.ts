@@ -75,6 +75,7 @@ export class CategoryComponent implements OnInit {
 
   openDeletionConfirmationWindow(categoryName: string, content) {
     this.categoryToDelete = categoryName;
+    this.replacementCategory = null;
     this.allowableReplacementCategories = this.categories.filter(category => category.name !== categoryName);
     this.modalService.open(content, {ariaLabelledBy: 'modal-category-deletion'}).result.then(
       (result) => {
