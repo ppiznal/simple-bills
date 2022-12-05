@@ -32,7 +32,7 @@ ext {
 }
 
 dependencies {
-    implementation 'pl.com.seremak.simplebills:commons:0.1.37'
+    implementation 'pl.com.seremak.simplebills:commons:0.1.44'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -60,7 +60,6 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
-
 
 dependencyManagement {
     imports {

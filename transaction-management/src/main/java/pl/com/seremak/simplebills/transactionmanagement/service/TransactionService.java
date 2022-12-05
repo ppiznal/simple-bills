@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 
-import static pl.com.seremak.simplebills.commons.converter.TransactionConverter.toTransaction;
+import static pl.com.seremak.simplebills.commons.converter.TransactionConverter.toNormalizedTransaction;
 import static pl.com.seremak.simplebills.commons.converter.TransactionConverter.toTransactionDto;
 
 @Slf4j
@@ -42,13 +42,13 @@ public class TransactionService {
 
 
     public Mono<Transaction> createTransaction(final String username, final TransactionDto transactionDto) {
-        final Transaction transaction = toTransaction(username, transactionDto);
-        return createTransaction(transaction);
+        final Transaction normalizedTransaction = toNormalizedTransaction(username, transactionDto);
+        return createTransaction(normalizedTransaction);
     }
 
     public Mono<Transaction> updateTransaction(final String username, final Integer transactionNumber, final TransactionDto transactionDto) {
-        final Transaction transaction = toTransaction(username, transactionNumber, transactionDto);
-        return updateTransaction(transaction);
+        final Transaction normalizedTransaction = toNormalizedTransaction(username, transactionNumber, transactionDto);
+        return updateTransaction(normalizedTransaction);
     }
 
     public Mono<Transaction> findTransactionByTransactionNumber(final String username, final Integer transactionNumber) {
@@ -85,7 +85,6 @@ public class TransactionService {
     }
 
     private Mono<Transaction> updateTransaction(final Transaction transaction) {
-        transaction.setMetadata(null);
         return findTransactionByTransactionNumber(transaction.getUser(), transaction.getTransactionNumber())
                 .zipWith(transactionSearchRepository.updateTransaction(transaction))
                 .doOnSuccess(TransactionTuple -> prepareAndSendTransactionUpdateActionMessage(TransactionTuple.getT1(), TransactionTuple.getT2()))

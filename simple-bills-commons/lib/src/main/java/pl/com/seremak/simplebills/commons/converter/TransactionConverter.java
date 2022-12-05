@@ -53,11 +53,23 @@ public class TransactionConverter {
                 .type(valueOf(transactionDto.getType().toUpperCase()))
                 .transactionNumber(transactionNumber)
                 .description(transactionDto.getDescription())
-                .amount(normalizeAmount(transactionDto.getAmount(), transactionDto.getType()))
+                .amount(transactionDto.getAmount())
                 .category(transactionDto.getCategory());
         toInstantUTC(transactionDto.getDate())
                 .ifPresent(transactionBuilder::date);
         return transactionBuilder.build();
+    }
+
+    public static Transaction toNormalizedTransaction(final String username, final TransactionDto transactionDto) {
+        final Transaction transaction = toTransaction(username, transactionDto.getTransactionNumber(), transactionDto);
+        return normalizeTransactionAmount(transaction);
+    }
+
+    public static Transaction toNormalizedTransaction(final String username,
+                                                      final Integer transactionNumber,
+                                                      final TransactionDto transactionDto) {
+        final Transaction transaction = toTransaction(username, transactionNumber, transactionDto);
+        return normalizeTransactionAmount(transaction);
     }
 
     public static TransactionDto toTransactionDto(final Transaction transaction) {
@@ -65,7 +77,7 @@ public class TransactionConverter {
                 .type(transaction.getType().toString().toUpperCase())
                 .transactionNumber(transaction.getTransactionNumber())
                 .description(transaction.getDescription())
-                .amount(normalizeAmount(transaction.getAmount(), transaction.getType()))
+                .amount(transaction.getAmount())
                 .category(transaction.getCategory());
         DateUtils.toLocalDate(transaction.getDate())
                 .ifPresent(transactionDtoBuilder::date);
@@ -84,10 +96,15 @@ public class TransactionConverter {
                 .username(transaction.getUser())
                 .categoryName(transaction.getCategory())
                 .type(actionType)
-                .amount(normalizeAmount(amountDiff, transaction.getType()))
+                .amount(amountDiff)
                 .date(transaction.getDate())
                 .transactionNumber(transaction.getTransactionNumber())
                 .build();
+    }
+
+    public static Transaction normalizeTransactionAmount(final Transaction transaction) {
+        transaction.setAmount(normalizeAmount(transaction.getAmount(), transaction.getType()));
+        return transaction;
     }
 
     public static BigDecimal normalizeAmount(final BigDecimal amount, final Transaction.Type transactionType) {

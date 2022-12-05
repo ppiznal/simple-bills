@@ -18,11 +18,11 @@ public class MessagePublisher {
     private final RabbitTemplate rabbitTemplate;
 
     public void sendUserCreationMessage(final String username) {
-        sendRabbitMessage(USER_CREATION_SIMPLE_BILLS_QUEUE, username);
+        sendRabbitMessage(USER_CREATION_PLANNING_QUEUE, username);
     }
 
     public void sendTransactionEventMessage(final TransactionEventDto transactionEventDto) {
-        sendRabbitMessage(TRANSACTION_EVENT_BILLS_PLANING_QUEUE, transactionEventDto);
+        sendRabbitMessage(TRANSACTION_EVENT_PLANING_QUEUE, transactionEventDto);
         if (StringUtils.endsWithIgnoreCase(Category.Type.ASSET.toString(), transactionEventDto.getCategoryName())) {
             sendRabbitMessage(TRANSACTION_EVENT_ASSETS_MANAGEMENT_QUEUE, transactionEventDto);
         }
@@ -30,6 +30,6 @@ public class MessagePublisher {
 
     private <T> void sendRabbitMessage(final String routingKey, final T rabbitMessage) {
         rabbitTemplate.convertAndSend(SIMPLE_BILLS_EXCHANGE, routingKey, rabbitMessage);
-        log.info("Message sent: queue={}, message={}", TRANSACTION_EVENT_BILLS_PLANING_QUEUE, rabbitMessage);
+        log.info("Message sent: queue={}, message={}", routingKey, rabbitMessage);
     }
 }
