@@ -201,7 +201,9 @@
             required
           />
         </div>
-        <div class="text-warning" *ngIf="!amount.valid && amount.touched">Amount must be positive non empty value</div>
+        <div class="text-warning" *ngIf="!amount.valid && amount.touched">
+          Amount cannot be empty and must be positive
+        </div>
         <label for="transaction-date-input" class="col-xs-3 col-sm-2 col-form-label">Date</label>
         <div class="input-group">
           <input
@@ -297,7 +299,7 @@
             #amount="ngModel"
           />
         </div>
-        <div class="text-warning" *ngIf="!amount.valid && amount.touched">Amount cannot be empty and must be positive.
+        <div class="text-warning" *ngIf="!amount.valid && amount.touched">Amount cannot be empty and must be positive
         </div>
         <label for="update-transaction-date-input" class="col-xs-3 col-sm-2 col-form-label">Date</label>
         <div class="input-group">
@@ -318,7 +320,7 @@
       type="button"
       class="btn btn-outline-dark"
       (click)="modal.close('Save click')"
-      [disabled]="!updateTransactionForm.valid">Create new transaction
+      [disabled]="!updateTransactionForm.valid">Update transaction
     </button>
   </div>
 </ng-template>
