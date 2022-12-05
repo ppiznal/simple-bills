@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Deposit } from "../../../dto/deposit";
+import { Deposit, DepositType } from "../../../dto/deposit";
 import { DepositService } from "../../../service/deposit.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
@@ -84,7 +84,7 @@ export class AssetsComponent implements OnInit {
 
   resetFormFields() {
     this.deposit.name = null;
-    this.deposit.depositType = null;
+    this.deposit.depositType = DepositType.TERM;
     this.deposit.value = null;
     this.deposit.durationInMonths = null;
     this.deposit.annualInterestRate = null;
