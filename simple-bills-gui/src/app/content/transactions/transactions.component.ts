@@ -125,7 +125,7 @@ export class TransactionsComponent implements OnInit {
     this.transactionDto.type = transaction.type;
     this.transactionDto.category = transaction.category;
     this.transactionDto.description = transaction.description;
-    this.transactionDto.amount = transaction.amount;
+    this.transactionDto.amount = Math.abs(transaction.amount);
     this.transactionDto.date = formatDate(transaction.date, "yyyy-MM-dd", "en");
   }
 
