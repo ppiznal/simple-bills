@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
@@ -67,7 +66,7 @@ public class BillsPlanClient {
         if (!(exception instanceof WebClientResponseException)) {
             return false;
         }
-        final HttpStatusCode statusCode = ((WebClientResponseException) exception).getStatusCode();
+        final HttpStatus statusCode = ((WebClientResponseException) exception).getStatusCode();
         if (Objects.equals(statusCode, HttpStatus.NOT_FOUND)) {
             log.info("Category with name={} for username={} not found.", categoryName, username);
             return true;
