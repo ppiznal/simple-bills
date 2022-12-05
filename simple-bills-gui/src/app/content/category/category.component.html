@@ -77,7 +77,7 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body text-dark">
-    <form>
+    <form #categoryCreationForm="ngForm">
       <h2 class="col-form-label">Add new category:</h2>
       <div class="mb-3">
         <label for="new-category-transaction-type-input" class="col-form-label">Transaction type</label>
@@ -96,8 +96,12 @@
             id="new-category-name-input"
             type="text"
             class="form-control"
-            name="category-name"
+            name="new-category-name-input"
+            required
+            #categoryName="ngModel"
             [(ngModel)]="category.name"/>
+        </div>
+        <div class="text-warning" *ngIf="!categoryName.valid && categoryName.touched">Category name cannot be empty
         </div>
         <div *ngIf="expenseTransactionType">
           <label for="new-category-limit-input" class="col-form-label">Category limit</label>
@@ -106,15 +110,23 @@
               id="new-category-limit-input"
               type="number" min="0.00" max="999999.99" step="0.01"
               class="form-control"
-              name="category"
+              name="new-category-limit-input"
+              #categoryLimit="ngModel"
               [(ngModel)]="category.limit"/>
+          </div>
+          <div class="text-warning" *ngIf="!categoryLimit.valid && categoryLimit.touched">Category limit must be
+            positive
           </div>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark m-2" (click)="modal.close('add category')">Create category
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button"
+            class="btn btn-outline-dark m-2"
+            (click)="modal.close('add category')"
+            [disabled]="!categoryCreationForm.valid">Create category
     </button>
   </div>
 </ng-template>
@@ -127,38 +139,49 @@
     <h4 class="modal-title" id="modal-category-update">Category update</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
-  <div class="modal-body text-dark" *ngIf="expenseTransactionType else incomeNotEditable">
-    <form>
-      <div class="mb-3">
-        <label for="update-category-name-input" class="col-form-label">Update category:</label>
-        <div class="input-group">
-          <input
-            type="text"
-            id="update-category-name-input"
-            name="new-category-name-input"
-            class="form-control"
-            disabled
-            [(ngModel)]="category.name">
-        </div>
-        <div *ngIf="expenseTransactionType">
-          <label for="category-update-limit-input" class="col-form-label">Category limit</label>
+  <div *ngIf="expenseTransactionType else incomeNotEditable">
+    <div class="modal-body text-dark">
+      <form #categoryEditForm="ngForm">
+        <div class="mb-3">
+          <label for="update-category-name-input" class="col-form-label">Update category:</label>
           <div class="input-group">
             <input
-              id="category-update-limit-input"
               type="text"
+              id="update-category-name-input"
+              name="update-category-name-input"
               class="form-control"
-              name="category"
-              [(ngModel)]="category.limit"
-            />
+              disabled
+              [(ngModel)]="category.name">
+          </div>
+          <div *ngIf="expenseTransactionType">
+            <label for="category-update-limit-input" class="col-form-label">Category limit</label>
+            <div class="input-group">
+              <input
+                id="category-update-limit-input"
+                type="number" min="0.00" max="999999.99" step="0.01"
+                class="form-control"
+                name="category-update-limit-input"
+                #categoryEditLimit="ngModel"
+                [(ngModel)]="category.limit"
+              />
+            </div>
+            <div class="text-warning" *ngIf="!categoryEditLimit.valid && categoryEditLimit.touched">Category limit
+              must be positive
+            </div>
           </div>
         </div>
-      </div>
-    </form>
-  </div>
-  <div class="modal-footer" *ngIf="expenseTransactionType">
-    <button type="button" class="btn btn-outline-dark m-2" (click)="modal.close('update category')">Update selected
-      category
-    </button>
+      </form>
+    </div>
+    <div class="modal-footer" *ngIf="expenseTransactionType">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+      <button
+        type="button"
+        class="btn btn-outline-dark m-2"
+        (click)="modal.close('update category')"
+        [disabled]="!categoryEditForm.valid">
+        Update selected category
+      </button>
+    </div>
   </div>
 </ng-template>
 
@@ -174,10 +197,10 @@
   <div class="modal-body">
     <form>
       <label for="category-input" class="col-form-label">Select the category
-        <span class="fw-bold text-dark">{{categoryToDelete}}</span>to which the transaction from
-        the deleted category will be assigned. If you don't select any category, transactions will be assigned to <span
-          class="fw-bold">undefined</span>
-        category:</label>
+        <span class="fw-bold text-dark">{{categoryToDelete}}</span>
+        to which the transaction from the deleted category will be assigned. If you don't select any category,
+        transactions will be assigned to
+        <span class="fw-bold">undefined</span>category:</label>
       <div *ngIf="categories else noData" class="input-group">
         <select [(ngModel)]="replacementCategory" name="replacementCategory" class="form-select"
                 aria-label="Default select example" id="category-input">

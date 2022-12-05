@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, tap } from "rxjs";
+import { Observable, retry, tap } from "rxjs";
 import { HttpUtils } from "../utils/httpClientUtils";
 import { environment } from "../environments/environment";
 import { User } from "../dto/user";
@@ -17,12 +17,13 @@ export class UserService {
   }
 
   getUser(): Observable<string> {
-    return this.httpClient.get<User>(
-      HttpUtils.prepareUrl(UserService.host, UserService.userEndpoint),
-      {headers: HttpUtils.prepareHeaders(), observe: 'response'})
+    return this.httpClient
+      .get<User>(HttpUtils.prepareUrl(UserService.host, UserService.userEndpoint),
+        {headers: HttpUtils.prepareHeaders(), observe: 'response'})
       .pipe(
-        map(response => response.body),
         tap(console.log),
+        retry({count: 3, delay: 1000}),
+        map(response => response.body),
         map(this.getShowUserName)
       );
   }

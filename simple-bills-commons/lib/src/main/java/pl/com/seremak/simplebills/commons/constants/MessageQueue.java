@@ -3,8 +3,8 @@ package pl.com.seremak.simplebills.commons.constants;
 public class MessageQueue {
 
     public static final String SIMPLE_BILLS_EXCHANGE = "simple-bills-exchange";
-    public static final String USER_CREATION_SIMPLE_BILLS_QUEUE = "user-creation-simple-bills";
-    public static final String CATEGORY_EVENT_SIMPLE_BILLS_QUEUE = "category-event-simple-bills";
-    public static final String TRANSACTION_EVENT_BILLS_PLANING_QUEUE = "transaction-event-bills-planning";
-    public static final String TRANSACTION_EVENT_ASSETS_MANAGEMENT_QUEUE = "transaction-event-assets-management";
+    public static final String USER_CREATION_PLANNING_QUEUE = "user_creation-planning";
+    public static final String CATEGORY_EVENT_TRANSACTION_MANAGEMENT_QUEUE = "category_event-transaction_management";
+    public static final String TRANSACTION_EVENT_PLANING_QUEUE = "transaction_event-planning";
+    public static final String TRANSACTION_EVENT_ASSETS_MANAGEMENT_QUEUE = "transaction_event-assets_management";
 }

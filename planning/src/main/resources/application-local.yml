@@ -18,7 +18,7 @@ server:
   port: 8082
 
 custom-properties:
-  allowed-origin: "http://localhost"
+  allowed-origin: "http://localhost:8080"
   expense-categories:
     - food
     - travel

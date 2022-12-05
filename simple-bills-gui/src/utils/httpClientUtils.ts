@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Cookie } from "ng2-cookies";
-import { throwError } from "rxjs";
+import { EMPTY } from "rxjs";
 
 
 export class HttpUtils {
@@ -70,30 +70,50 @@ export class HttpUtils {
     });
   }
 
-  // todo - enhance error handling
   public static handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
-      alert("Some netork error detected. Please try again later!")
+      alert("Some network error detected. Please try again later!")
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
-
       switch (error.status) {
         case 409: {
           alert("Error. An object with given name/key already exists!")
         }
       }
     }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return EMPTY
+  }
+
+  public static prepareOAuth2ProviderLoginUri(authUrl: string,
+                                              clientId: string,
+                                              redirectUri: string,
+                                              scopes: string[]) {
+    const scopeParam = HttpUtils.prepareScopesParam(scopes);
+    return `${authUrl}?response_type=code&scope=${scopes}&client_id=${clientId}&redirect_uri=${redirectUri}`
+      .replaceAll(",", "%20")
+  }
+
+  public static prepareOAuth2CodeFlowUrlParams(code: string, clientId: string, redirectUri: string): string {
+    let params = new URLSearchParams();
+    params.append('grant_type', 'authorization_code');
+    params.append('client_id', clientId);
+    params.append('redirect_uri', redirectUri);
+    params.append('code', code);
+    return params.toString();
   }
 
   private static getUrlParam(paramName: string, paramValue: string): string {
     return `${paramName}=${paramValue}`;
+  }
+
+  private static prepareScopesParam(scopes: string[]): string {
+    return scopes.join();
+  }
+
+  private escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 }
 

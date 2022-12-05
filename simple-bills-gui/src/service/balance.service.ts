@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../environments/environment";
 import { Balance } from "../dto/balance";
-import { BehaviorSubject, catchError, debounceTime, Observable, Subject, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, debounceTime, Observable, retry, Subject, switchMap, tap } from "rxjs";
 import { HttpUtils } from "../utils/httpClientUtils";
 import { Injectable } from "@angular/core";
 
@@ -31,8 +31,9 @@ export class BalanceService {
     const url = HttpUtils.prepareUrl(BalanceService.host, BalanceService.endpoint);
     return this.httpClient.get<Balance>(url, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        tap(console.log),
         catchError(HttpUtils.handleError),
-        tap(console.log)
+        retry({count: 3, delay: 1000})
       );
   }
 

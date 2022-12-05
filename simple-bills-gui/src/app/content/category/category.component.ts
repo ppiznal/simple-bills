@@ -57,7 +57,7 @@ export class CategoryComponent implements OnInit {
   }
 
   openEditWindowForSelectedCategory(category: Category, content) {
-    this.category = category;
+    this.setFormCategoryFields(category);
     this.expenseTransactionType = category.transactionType === TransactionType.EXPENSE;
     this.modalService.open(content, {ariaLabelledBy: 'modal-category-update'}).result.then(
       () => {
@@ -75,6 +75,7 @@ export class CategoryComponent implements OnInit {
 
   openDeletionConfirmationWindow(categoryName: string, content) {
     this.categoryToDelete = categoryName;
+    this.replacementCategory = null;
     this.allowableReplacementCategories = this.categories.filter(category => category.name !== categoryName);
     this.modalService.open(content, {ariaLabelledBy: 'modal-category-deletion'}).result.then(
       (result) => {
@@ -89,6 +90,12 @@ export class CategoryComponent implements OnInit {
         console.log(result);
       }
     );
+  }
+
+  private setFormCategoryFields(category: Category) {
+    this.category.name = category.name;
+    this.category.transactionType = category.transactionType;
+    this.category.limit = category.limit;
   }
 
   private static countTotalLimit(categories: Category[]): number {

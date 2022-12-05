@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { HttpUtils } from "../utils/httpClientUtils";
 import { TransactionDto } from "../dto/transactionDto";
-import { catchError, Observable, tap } from "rxjs";
+import { catchError, Observable, retry, tap } from "rxjs";
 import { TransactionSearchService } from "./transaction-search.service";
 import { environment } from "../environments/environment";
 import { Transaction } from "../dto/transaction";
@@ -21,6 +21,7 @@ export class TransactionCrudService {
     return this.httpClient
       .post<string>(url, transaction, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        retry({count: 3, delay: 1000}),
         tap(strResponse => console.log(`Transaction with transactionNumber=${strResponse} created.`)),
         tap(() => this.transactionSearchService.refresh()),
         catchError(HttpUtils.handleError)
@@ -32,6 +33,7 @@ export class TransactionCrudService {
     return this.httpClient
       .patch<Transaction>(url, transaction, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        retry({count: 3, delay: 1000}),
         tap((updatedBill) => console.log(`Transaction with transactionNumber=${updatedBill.transactionNumber} updated.`)),
         tap(() => this.transactionSearchService.refresh()),
         catchError(HttpUtils.handleError)

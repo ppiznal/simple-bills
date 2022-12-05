@@ -31,7 +31,8 @@ public class BalanceService {
                 .defaultIfEmpty(prepareNewBalanceForUser(transactionEventDto.getUsername()))
                 .map(existingBalance -> updateBalance(existingBalance, transactionEventDto))
                 .flatMap(balanceRepository::save)
-                .doOnSuccess(updatedBalance -> log.info("Balance for username={} has been updated", transactionEventDto.getAmount()));
+                .doOnSuccess(updatedBalance -> log.info("Balance for username={} and amount={} has been updated",
+                        transactionEventDto.getUsername(), transactionEventDto.getAmount()));
     }
 
     public Mono<Balance> createNewClearBalance(final String username) {

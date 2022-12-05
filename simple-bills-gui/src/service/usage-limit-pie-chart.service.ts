@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
-import { BehaviorSubject, catchError, debounceTime, Observable, Subject, switchMap, tap } from "rxjs";
+import { BehaviorSubject, catchError, debounceTime, Observable, retry, Subject, switchMap, tap } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { CategoryUsageLimit } from "../dto/categoryUsageLimit";
 import { HttpUtils } from "../utils/httpClientUtils";
@@ -34,10 +34,12 @@ export class UsageLimitPieChartService {
   private findCategoryUsageLimits(total?: boolean): Observable<CategoryUsageLimit[]> {
     const url = HttpUtils.prepareUrl(UsageLimitPieChartService.host, UsageLimitPieChartService.endpoint);
     const completeUrl = total ? `${url}?total=true` : url;
-    return this.httpClient.get<UsageLimitPieChartService[]>(completeUrl, {headers: HttpUtils.prepareHeaders()})
+    return this.httpClient
+      .get<UsageLimitPieChartService[]>(completeUrl, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        retry({count: 3, delay: 1000}),
+        tap(console.log),
         catchError(HttpUtils.handleError),
-        tap(console.log)
       );
   }
 

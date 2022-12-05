@@ -20,7 +20,6 @@ import static pl.com.seremak.simplebills.commons.constants.MessageQueue.*;
 @RequiredArgsConstructor
 public class RabbitMQConfig {
 
-
     private final CachingConnectionFactory cachingConnectionFactory;
     private final ObjectMapper objectMapper;
 
@@ -51,18 +50,18 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue userCreationSimpleBillsQueue() {
-        return new Queue(USER_CREATION_SIMPLE_BILLS_QUEUE, false);
+    public Queue userCreationPlanningQueue() {
+        return new Queue(USER_CREATION_PLANNING_QUEUE, false);
     }
 
     @Bean
-    public Queue categoryDeletionPlaningQueue() {
-        return new Queue(CATEGORY_EVENT_SIMPLE_BILLS_QUEUE, false);
+    public Queue categoryEventTransactionManagement() {
+        return new Queue(CATEGORY_EVENT_TRANSACTION_MANAGEMENT_QUEUE, false);
     }
 
     @Bean
     public Queue transactionEventPlanningQueue() {
-        return new Queue(TRANSACTION_EVENT_BILLS_PLANING_QUEUE, false);
+        return new Queue(TRANSACTION_EVENT_PLANING_QUEUE, false);
     }
 
     @Bean
@@ -71,21 +70,21 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    Binding userCreationSimpleBillsBinding(final Queue userCreationSimpleBillsQueue,
+    Binding userCreationSimpleBillsBinding(final Queue userCreationPlanningQueue,
                                            final DirectExchange exchange) {
         return BindingBuilder
-                .bind(userCreationSimpleBillsQueue)
+                .bind(userCreationPlanningQueue)
                 .to(exchange)
-                .with(USER_CREATION_SIMPLE_BILLS_QUEUE);
+                .with(USER_CREATION_PLANNING_QUEUE);
     }
 
     @Bean
-    Binding categoryDeletionPlaningBinding(final Queue categoryDeletionPlaningQueue,
+    Binding categoryDeletionPlaningBinding(final Queue categoryEventTransactionManagement,
                                            final DirectExchange exchange) {
         return BindingBuilder
-                .bind(categoryDeletionPlaningQueue)
+                .bind(categoryEventTransactionManagement)
                 .to(exchange)
-                .with(CATEGORY_EVENT_SIMPLE_BILLS_QUEUE);
+                .with(CATEGORY_EVENT_TRANSACTION_MANAGEMENT_QUEUE);
     }
 
     @Bean
@@ -94,7 +93,7 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(transactionEventPlanningQueue)
                 .to(exchange)
-                .with(TRANSACTION_EVENT_BILLS_PLANING_QUEUE);
+                .with(TRANSACTION_EVENT_PLANING_QUEUE);
     }
 
     @Bean

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { catchError, Observable, tap } from "rxjs";
+import { catchError, Observable, retry, tap } from "rxjs";
 import { HttpUtils } from "../utils/httpClientUtils";
 import { Category } from "../dto/category";
 import { map } from "rxjs/operators";
@@ -26,6 +26,7 @@ export class CategoryService {
       .post<Category>(url, category, {headers: HttpUtils.prepareHeaders()})
       .pipe(
         tap(category => console.log(`Category with name ${category.name} created.`)),
+        retry({count: 3, delay: 1000}),
         catchError(HttpUtils.handleError)
       )
   }
@@ -36,6 +37,7 @@ export class CategoryService {
       .patch<Category>(url, category, {headers: HttpUtils.prepareHeaders()})
       .pipe(
         tap(category => console.log(`Category with name ${category.name} updated.`)),
+        retry({count: 3, delay: 1000}),
         catchError(HttpUtils.handleError)
       )
   }
@@ -44,9 +46,10 @@ export class CategoryService {
     const url = HttpUtils.prepareUrl(CategoryService.host, CategoryService.endpoint);
     return this.httpClient.get<Category[]>(url, {headers: HttpUtils.prepareHeaders()})
       .pipe(
+        tap(console.log),
+        retry({count: 3, delay: 1000}),
         map(categories => this.filterCategories(categories, transactionType)),
         catchError(HttpUtils.handleError),
-        tap(console.log)
       );
   }
 
@@ -57,6 +60,7 @@ export class CategoryService {
       .delete(url, {headers: HttpUtils.prepareHeaders(), observe: 'response'})
       .pipe(
         tap(categoryName => console.log(`Category with name ${categoryName.body} deleted.`)),
+        retry({count: 3, delay: 1000}),
         catchError(HttpUtils.handleError)
       )
   }
