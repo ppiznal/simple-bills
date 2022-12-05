@@ -60,7 +60,9 @@ public class SpringSecurity {
     public CorsConfigurationSource corsConfiguration() {
         final CorsConfiguration corsConfig = new CorsConfiguration();
         corsConfig.applyPermitDefaultValues();
+        corsConfig.addAllowedMethod(HttpMethod.POST);
         corsConfig.addAllowedMethod(HttpMethod.PUT);
+        corsConfig.addAllowedMethod(HttpMethod.PATCH);
         corsConfig.addAllowedMethod(HttpMethod.DELETE);
         corsConfig.setAllowedOrigins(List.of(allowedOrigin));
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
