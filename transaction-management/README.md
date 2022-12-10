@@ -1,1 +1,0 @@
-# Simple-bills transaction management
