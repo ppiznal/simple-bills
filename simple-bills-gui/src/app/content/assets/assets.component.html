@@ -1,0 +1,316 @@
+<div class="container p-1 text-center">
+  <button class="btn btn-lg btn-outline-secondary m-2" (click)="openDepositCreationWindow(depositCreation)">
+    Add deposit
+  </button>
+  <br>
+  <hr>
+  <div class="row">
+    <div *ngIf="depositService.deposits$ | async as deposits else noData">
+      <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Deposit type</th>
+          <th>Deposit name</th>
+          <th>Deposit value</th>
+          <th>Bank name</th>
+          <th>Duration [months]</th>
+          <th>Annual interest rate</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let deposit of deposits; index as i">
+          <th scope="row">
+            {{i + 1}}
+          </th>
+          <td>
+            {{deposit.depositType}}
+          </td>
+          <td>
+            {{deposit.name}}
+          </td>
+          <td>
+            {{deposit.value | currency}}
+          </td>
+          <td>
+            {{deposit.bankName}}
+          </td>
+          <td>
+            {{deposit.durationInMonths }}
+          </td>
+          <td>
+            {{deposit.annualInterestRate}}%
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-sm"
+              aria-label="Close"
+              (click)="openDepositEditWindow(deposit, editDeposit)"
+            >Edit
+            </button>
+          </td>
+          <td>
+            <button
+              type="button" class="btn-close" aria-label="Close"
+              (click)="openDepositDeletionConfirmationWindow(deposit.name, deletionConfirmationWindow)"
+            >
+            </button>
+          </td>
+        </tr>
+        <tr class="bg-info fw-bold">
+          <th></th>
+          <td></td>
+          <td>Total limit:</td>
+          <!--            <td>{{totalLimit | currency}}</td>-->
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!--
+      add new deposit modal window
+-->
+<ng-template #depositCreation let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-deposit-creation">Deposit creation</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-dark">
+    <form #createDepositForm="ngForm">
+      <h2 class="col-form-label">Add new deposit:</h2>
+      <div class="mb-3">
+        <label for="new-deposit-name-input" class="col-form-label">Deposit name</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="new-deposit-name-input"
+            name="new-deposit-transaction-type-input"
+            class="form-control"
+            [(ngModel)]="deposit.name"
+            #depositName="ngModel"
+            required/>
+        </div>
+        <div class="text-warning" *ngIf="!depositName.valid && depositName.touched">Deposit name cannot be empty</div>
+        <label for="new-deposit-type-input" class="col-form-label">Deposit type</label>
+        <select
+          [(ngModel)]="deposit.depositType"
+          name="new-deposit-type-input"
+          class="form-select"
+          id="new-deposit-type-input"
+          #depositType="ngModel"
+          required>
+          <option value="TERM">Term</option>
+          <option value="PERPETUAL">Perpetual</option>
+        </select>
+        <div class="text-warning" *ngIf="!depositType.valid && depositType.touched">Deposit type cannot be empty</div>
+        <label for="new-deposit-bank-input" class="col-form-label">Bank name</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-bank-input"
+            type="text"
+            class="form-control"
+            name="new-deposit-bank-input"
+            [(ngModel)]="deposit.bankName"
+            #bankName="ngModel"
+            required/>
+        </div>
+        <div class="text-warning" *ngIf="!bankName.valid && bankName.touched">Bank name cannot be empty</div>
+        <label for="new-deposit-value-input" class="col-form-label">Deposit value</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-value-input"
+            type="number" min="0.00" max="999999.99" step="0.01"
+            class="form-control"
+            name="new-deposit-value-input"
+            [(ngModel)]="deposit.value"
+            #depositValue="ngModel"
+            required/>
+        </div>
+        <div class="text-warning" *ngIf="!depositValue.valid && depositValue.touched">Deposit value cannot be empty and
+          must be positive
+        </div>
+        <label for="new-deposit-interest-rate-input" class="col-form-label">Annual interest rate</label>
+        <div class="input-group">
+          <input
+            id="new-deposit-interest-rate-input"
+            type="number" min="0" max="99.99" step="0.01"
+            class="form-control"
+            name="new-deposit-interest-rate-input"
+            [(ngModel)]="deposit.annualInterestRate"
+            #depositInterestRate="ngModel"
+            required/>
+        </div>
+        <div class="text-warning" *ngIf="!depositInterestRate.valid && depositInterestRate.touched">
+          Annual interest rate cannot be empty and must be positive
+        </div>
+        <div *ngIf="deposit.depositType.toString() === 'TERM'">
+          <label for="new-deposit-duration-input" class="col-form-label">Duration</label>
+          <div class="input-group">
+            <input
+              id="new-deposit-duration-input"
+              type="number" min="0" max="9999" step="1"
+              class="form-control"
+              name="new-deposit-duration-input"
+              [(ngModel)]="deposit.durationInMonths"
+              #depositDuration="ngModel"
+              required/>
+          </div>
+          <div class="text-warning" *ngIf="!depositDuration.valid && depositDuration.touched">
+            Deposit duration must be positive
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button"
+            class="btn btn-outline-dark m-2"
+            (click)="modal.close('add deposit')"
+            [disabled]="!createDepositForm.valid">Create deposit
+    </button>
+  </div>
+</ng-template>
+
+<!--
+      edit deposit modal window
+-->
+<ng-template #editDeposit let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-deposit-update">Deposit update</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body text-dark">
+    <form #updateDepositForm="ngForm">
+      <h2 class="col-form-label">Add new deposit:</h2>
+      <div class="mb-3">
+        <label for="update-deposit-name-input" class="col-form-label">Deposit name</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="update-deposit-name-input"
+            name="new-deposit-transaction-type-input"
+            class="form-control"
+            disabled
+            [(ngModel)]="deposit.name">
+        </div>
+        <label for="update-deposit-type-input" class="col-form-label">Deposit type</label>
+        <select
+          [(ngModel)]="deposit.depositType"
+          name="update-deposit-type-select"
+          class="form-select"
+          id="update-deposit-type-input"
+          #depositType="ngModel">
+          <option value="TERM">Term</option>
+          <option value="PERPETUAL">Perpetual</option>
+        </select>
+        <div class="text-warning" *ngIf="!depositType.valid && depositType.touched">
+          Deposit type cannot be empty
+        </div>
+        <label for="update-deposit-bank-input" class="col-form-label">Bank name</label>
+        <div class="input-group">
+          <input
+            id="update-deposit-bank-input"
+            type="text"
+            class="form-control"
+            name="update-deposit-bank-input"
+            [(ngModel)]="deposit.bankName"
+            #bankName="ngModel"
+            required/>
+        </div>
+        <div class="text-warning" *ngIf="!bankName.valid && bankName.touched">
+          Bank name cannot be empty
+        </div>
+        <label for="update-deposit-value-input" class="col-form-label">Deposit value</label>
+        <div class="input-group">
+          <input
+            id="update-deposit-value-input"
+            type="number" min="0.00" max="999999.99" step="0.01"
+            class="form-control"
+            name="update-deposit-value-input"
+            [(ngModel)]="deposit.value"
+            #depositValue="ngModel"
+            required/>
+        </div>
+        <div class="text-warning" *ngIf="!depositValue.valid && depositValue.touched">
+          Deposit value cannot be empty and must be positive
+        </div>
+        <div *ngIf="deposit.depositType.toString() === 'TERM'">
+          <label for="update-deposit-duration-input" class="col-form-label">Duration</label>
+          <div class="input-group">
+            <input
+              id="update-deposit-duration-input"
+              type="number" min="0" max="9999" step="1"
+              class="form-control"
+              name="update-deposit-duration-input"
+              [(ngModel)]="deposit.durationInMonths"
+              #duration="ngModel"
+              required/>
+          </div>
+          <div class="text-warning" *ngIf="!duration.valid && duration.touched">
+            Duration cannot be empty and must be positive
+          </div>
+          <label for="update-deposit-interest-rate-input" class="col-form-label">Annual interest rate</label>
+          <div class="input-group">
+            <input
+              id="update-deposit-interest-rate-input"
+              type="number" min="0" max="99.99" step="0.01"
+              class="form-control"
+              name="update-deposit-interest-rate-input"
+              [(ngModel)]="deposit.annualInterestRate"
+              #annualInterestRate="ngModel"
+              required/>
+          </div>
+          <div class="text-warning" *ngIf="!annualInterestRate.valid && annualInterestRate.touched">
+            Annual interest rate be empty and must be positive
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button"
+            class="btn btn-outline-dark m-2"
+            (click)="modal.close('add deposit')"
+            [disabled]="!updateDepositForm.valid">
+      Update deposit
+    </button>
+  </div>
+</ng-template>
+
+<!--
+      delete deposit modal window
+-->
+<ng-template #deletionConfirmationWindow let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-deposit-deletion">Deposit deletion</h4>
+    <button type="button" class="btn-close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <br>
+    <p><strong class="text-danger">Are you sure you want to delete
+      <span class="fw-bold text-dark">{{selectedDeposit}}</span>
+      deposit?</strong></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="modal.close('Ok click')">Ok</button>
+  </div>
+</ng-template>
+
+<ng-template #noData>
+  <h3 class="text-center fw-bold">No deposits found</h3>
+</ng-template>
