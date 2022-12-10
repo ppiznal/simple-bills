@@ -1,0 +1,39 @@
+<!-- navbar -->
+<nav class="shadow navbar navbar-expand navbar navbar-dark bg-secondary rounded">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">simple-bills</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul ngbNav class="navbar-nav">
+        <li class="nav-item" [ngbNavItem]="1">
+          <a class="nav-link" ngbNavLink routerLink="/home">home</a>
+        </li>
+        <li *ngIf="isLogged" class="nav-item" [ngbNavItem]="2">
+          <a class="nav-link" ngbNavLink routerLink="/transactions">transactions</a>
+        </li>
+        <li *ngIf="isLogged" class="nav-item" [ngbNavItem]="3">
+          <a class="nav-link" ngbNavLink routerLink="/category">categories</a>
+        </li>
+        <li *ngIf="isLogged" class="nav-item" [ngbNavItem]="4">
+          <a class="nav-link" ngbNavLink routerLink="/assets">assets</a>
+        </li>
+        <li ngbDropdown class="nav-item" [ngbNavItem]="5">
+          <a href (click)="false" class="nav-link" ngbDropdownToggle>Links</a>
+          <div ngbDropdownMenu>
+            <a ngbDropdownItem>Documentation</a>
+            <div class="dropdown-divider"></div>
+            <a ngbDropdownItem href="https://github.com/lukaszse">My Github</a>
+            <a ngbDropdownItem href="https://www.linkedin.com/in/%C5%82ukasz-seremak-8b9291a2/">My Linkedin</a>
+          </div>
+        </li>
+      </ul>
+      <span class="ms-auto">
+          <span *ngIf="!isLogged">
+            <button class="btn btn-outline-light" (click)="login()" type="submit">Login</button>
+          </span>
+          <span *ngIf="isLogged">
+            <button class="btn btn-outline-light" (click)="logout()">Logout</button>
+          </span>
+      </span>
+    </div>
+  </div>
+</nav>

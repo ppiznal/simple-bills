@@ -1,0 +1,35 @@
+<div class="container p-1">
+  <p></p>
+  <div *ngIf="loggedUsername | async as user else noLoggedIn">
+    <div class="text-center">
+      <h2>Welcome {{user}}!</h2>
+      <br>
+      <h5 class="fw-bold">
+        <span class="text-primary">Total balance: </span>
+        <span class="col col-form-label" *ngIf="!(balanceService.loading$ | async) else loading">
+          <span *ngIf="balanceService.balance$ | async as balance">{{balance.balance | currency}}</span>
+    </span>
+      </h5>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-xl-6">
+        <app-pie-usage-chart></app-pie-usage-chart>
+      </div>
+      <div class="col-xl-6">
+        <app-limit-usage-chart></app-limit-usage-chart>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noLoggedIn>
+  <div class="text-center">
+    <h2>Welcome to Simple Bills!</h2><br><br>
+    <h4>Please log in!</h4>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <span class="text-dark">loading... </span>
+</ng-template>
